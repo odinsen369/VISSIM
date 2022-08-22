@@ -203,7 +203,7 @@ void RenderWindow::createObjects()
     mLight = new Light;
     mObjects.push_back(mLight);
 
-    /////player/////
+    /////player///// oppgave 4
      player = new InteractiveObject;
      player->setDrawMethod(DrawMethod::Triangles);
      player->setVertices(MeshGenerator::CubeMaker()); //temp player
@@ -307,7 +307,7 @@ void RenderWindow::Drawcall()
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, XYZ->mMatrix.constData());
     XYZ->draw();
 
-    ////player
+    ////player oppgave 4
     glUseProgram(mShaderProgram[2]->getProgram());
     glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
     glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
@@ -583,7 +583,7 @@ void RenderWindow::Movement(float deltaTime)
     ////Player movement
     if(player && mActiveCamera == &mCamera1)
     {
-        if(mCurrentInputs[Qt::Key_W])
+        if(mCurrentInputs[Qt::Key_W]) //frem
         {
             auto fwd = mActiveCamera->getForward();
             fwd.setZ(0);
@@ -591,7 +591,7 @@ void RenderWindow::Movement(float deltaTime)
             fwd = fwd / 5;
             player->push(fwd,0.03);
         }
-        if(mCurrentInputs[Qt::Key_S])
+        if(mCurrentInputs[Qt::Key_S]) //tilbake
         {
             auto fwd = mActiveCamera->getForward();
             fwd.setZ(0);
@@ -601,12 +601,12 @@ void RenderWindow::Movement(float deltaTime)
         }
         if(mCurrentInputs[Qt::Key_A] || mCurrentInputs[Qt::Key_D])
         {
-            if(mCurrentInputs[Qt::Key_A])
+            if(mCurrentInputs[Qt::Key_A]) //roter høyre
             {
                 player->rotate(1.f);
                 mActiveCamera->followMouse(1,0);
             }
-            if(mCurrentInputs[Qt::Key_D])
+            if(mCurrentInputs[Qt::Key_D]) //roter venstre
             {
                 player->rotate(-1.f);
                 mActiveCamera->followMouse(-1,0);
