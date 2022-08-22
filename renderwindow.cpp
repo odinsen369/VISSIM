@@ -199,7 +199,7 @@ void RenderWindow::createObjects()
     mesh = new ObjMesh("../3Dprog22konte/Assets/Monkey.obj");
     mObjects.push_back(mesh);
 
-    /////light//////
+    /////light////// oppgave 3
     mLight = new Light;
     mObjects.push_back(mLight);
 
