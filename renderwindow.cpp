@@ -203,6 +203,7 @@ void RenderWindow::createObjects()
 
     /////light////// oppgave 3
     mLight = new Light;
+    mLight->mMatrix.translate(10,10,10);
     mObjects.push_back(mLight);
 
     /////player///// oppgave 4
@@ -215,19 +216,20 @@ void RenderWindow::createObjects()
      /////bakke////// oppgave 2
      bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1); //endre texture number i draw
      bakke->mMatrix.translate(-15,-25,0); //translate alt med -15,-25,0
+     bakke->mMatrix.scale(1,1,1);
      mObjects.push_back(bakke);
 
      player->hmfloor = bakke;
 
      /////dot//////
-     dot = new InteractiveObject;
-     dot->setVertices((MeshGenerator::Dot()));
-     mObjects.push_back(dot);
+//     dot = new InteractiveObject;
+//     dot->setVertices((MeshGenerator::Dot()));
+//     mObjects.push_back(dot);
 
-    bezier = new InteractiveObject;
-    bezier->setDrawMethod(DrawMethod::LineStrip);
-    bezier->setVertices(MeshGenerator::makeBezier(v1,v2,v3,v4));
-    mObjects.push_back(bezier);
+//    bezier = new InteractiveObject;
+//    bezier->setDrawMethod(DrawMethod::LineStrip);
+//    bezier->setVertices(MeshGenerator::makeBezier(v1,v2,v3,v4));
+//    mObjects.push_back(bezier);
 
     /////npc/////
     npc = new NPC();
@@ -237,18 +239,20 @@ void RenderWindow::createObjects()
     mObjects.push_back(npc);
 
 
-    fence = new InteractiveObject;
-    fence->setVertices(MeshGenerator::Fence());
-    fence->setPosition(2,3,1);
-    mDrawObjects.push_back(fence);
-    fence = new InteractiveObject;
-    fence->setVertices(MeshGenerator::Fence());
-    fence->setPosition(10,5,1);
-    fence->rotate(90.f);
-    mDrawObjects.push_back(fence);
+//    fence = new InteractiveObject;
+//    fence->setVertices(MeshGenerator::Fence());
+//    fence->setPosition(2,3,1);
+//    mDrawObjects.push_back(fence);
+//    fence = new InteractiveObject;
+//    fence->setVertices(MeshGenerator::Fence());
+//    fence->setPosition(10,5,1);
+//    fence->rotate(90.f);
+//    mDrawObjects.push_back(fence);
 
 
+    //oppgave 9
     for (int i = 0; i < 20; i++) {
+//        Sleep(20); fiks runtime delay
         trophy = new InteractiveObject;
         trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue"));
         trophy->move(rand() % 30 - 15, rand() % 50 - 25, 5.f);
@@ -340,16 +344,16 @@ void RenderWindow::Drawcall()
     bakke->draw();
 
     ////dot
-    glUseProgram(mShaderProgram[0]->getProgram() );
-    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
-    dot->draw();
+//    glUseProgram(mShaderProgram[0]->getProgram() );
+//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
+//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
+//    dot->draw();
 
     ////bezier
-    glUseProgram(mShaderProgram[0]->getProgram() );
-    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, bezier->mMatrix.constData());
-    bezier->draw();
+//    glUseProgram(mShaderProgram[0]->getProgram() );
+//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
+//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, bezier->mMatrix.constData());
+//    bezier->draw();
 
     ////npc
     glUseProgram(mShaderProgram[0]->getProgram() );
@@ -579,7 +583,19 @@ void RenderWindow::Movement(float deltaTime)
     ////Light movement
     if (mLight)
     {
-        mLight->orbit(deltaTime);
+        if (time <= 300 && right == true)
+        {
+        mLight->mMatrix.translate(0.1f,0,0);
+        time += 1;
+        }
+        else
+        {
+        right = false;
+        mLight->mMatrix.translate(-0.1f,0,0);
+        time -= 1.f/2.f;
+        if (time <= 0)
+        {right = true;}
+        }
     }
 
     ////Player movement

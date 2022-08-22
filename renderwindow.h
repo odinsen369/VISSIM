@@ -157,6 +157,8 @@ public:
     std::vector<InteractiveObject*> blueTrophies;
     std::vector<InteractiveObject*> redTrophies;
     bool victory = false;
+    float time {0};
+    bool right = true;
 };
 
 #endif // RENDERWINDOW_H
