@@ -145,9 +145,11 @@ void RenderWindow::CamOgShaderSetup()
     for (auto it=mDrawObjects.begin(); it!= mDrawObjects.end(); it++)
         (*it)->init(mMmatrixUniform0);
 
+    // oppgave 5b
     mCamera1.init(mPmatrixUniform0,mVmatrixUniform0);
     mCamera1.perspective(80, 4.0/3.0, 0.1, 1000.0);
 
+    // oppgave 5a
     mCamera2.init(mPmatrixUniform0,mVmatrixUniform0);
     mCamera2.perspective(80, 4.0/3.0, 0.1, 1000.0);
 

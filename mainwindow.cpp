@@ -78,7 +78,7 @@ void MainWindow::init()
 //Example of a slot called from the button on the top of the program.
 
 
-//oppgave 6
+//oppgave 5
 void MainWindow::on_Modetoggle_toggled(bool checked)
 {
     if(checked)
