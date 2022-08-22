@@ -97,6 +97,7 @@ void NPC::move()
         i += direction;
 }
 
+//oppgave 10
 void NPC::Tick(float deltaTime) {
   InteractiveObject* trophyFound = nullptr;
   for (auto p : *trofe) {

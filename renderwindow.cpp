@@ -231,7 +231,7 @@ void RenderWindow::createObjects()
 //    bezier->setVertices(MeshGenerator::makeBezier(v1,v2,v3,v4));
 //    mObjects.push_back(bezier);
 
-    /////npc/////
+    /////npc///// oppgave 10
     npc = new NPC();
     npc->setVertices(MeshGenerator::createcube());
     npc->setPosition(0,0,1);
