@@ -110,7 +110,6 @@ void RenderWindow::init()
 
 void RenderWindow::CamOgShaderSetup()
 {
-    //satt opp filplassering til nytt prosjekt
     mShaderProgram[0] = new Shader("../3Dprog22konte/plainshader.vert", "../3Dprog22konte/plainshader.frag");
     mShaderProgram[1] = new Shader("../3Dprog22konte/textureshader.vert", "../3Dprog22konte/textureshader.frag");
     mShaderProgram[2] = new Shader("../3Dprog22konte/phongshader.vert", "../3Dprog22konte/phongshader.frag");
@@ -146,7 +145,6 @@ void RenderWindow::CamOgShaderSetup()
     for (auto it=mDrawObjects.begin(); it!= mDrawObjects.end(); it++)
         (*it)->init(mMmatrixUniform0);
 
-    ////oppgave 5////
     mCamera1.init(mPmatrixUniform0,mVmatrixUniform0);
     mCamera1.perspective(80, 4.0/3.0, 0.1, 1000.0);
 
@@ -209,11 +207,10 @@ void RenderWindow::createObjects()
      player = new InteractiveObject;
      player->setDrawMethod(DrawMethod::Triangles);
      player->setVertices(MeshGenerator::CubeMaker()); //temp player
-//     player->move(15,25,0);
      player->hasGravity = true;
      mObjects.push_back(player);
 
-     /////bakke//////
+     /////bakke////// oppgave 2
      bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1); //endre texture number i draw
      bakke->mMatrix.translate(-15,-25,0); //translate alt med -15,-25,0
      mObjects.push_back(bakke);
@@ -225,28 +222,19 @@ void RenderWindow::createObjects()
      dot->setVertices((MeshGenerator::Dot()));
      mObjects.push_back(dot);
 
-    /////oppgave 7 (bezier)/////
     bezier = new InteractiveObject;
     bezier->setDrawMethod(DrawMethod::LineStrip);
     bezier->setVertices(MeshGenerator::makeBezier(v1,v2,v3,v4));
     mObjects.push_back(bezier);
 
     /////npc/////
-//    npc = new NPC(v1,v2,v3,v4);
-//    npc->setVertices(MeshGenerator::createcube());
-//    mObjects.push_back(npc);
     npc = new NPC();
     npc->setVertices(MeshGenerator::createcube());
     npc->setPosition(0,0,1);
     npc->trofe = &redTrophies;
     mObjects.push_back(npc);
 
-    ////oppgave 9 npc attempt
-    bombNPC = new NPC(p1,p2,p3,p4);
-    bombNPC->setVertices(MeshGenerator::createcube());
-    mDrawObjects.push_back(bombNPC);
 
-    /////oppgave 10 (fence)/////
     fence = new InteractiveObject;
     fence->setVertices(MeshGenerator::Fence());
     fence->setPosition(2,3,1);
@@ -257,9 +245,7 @@ void RenderWindow::createObjects()
     fence->rotate(90.f);
     mDrawObjects.push_back(fence);
 
-    /////setter opp alle trophies i oppgave 8/////
-//    redTrophy = 0;
-//    blueTrophy = 0;
+
     for (int i = 0; i < 20; i++) {
         trophy = new InteractiveObject;
         trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue"));
@@ -321,7 +307,7 @@ void RenderWindow::Drawcall()
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, XYZ->mMatrix.constData());
     XYZ->draw();
 
-    ////oppgave 4 (player)
+    ////player
     glUseProgram(mShaderProgram[2]->getProgram());
     glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
     glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
@@ -551,10 +537,6 @@ void RenderWindow::Tick(float deltaTime)
         qDebug() << "npc won";
         victory = true;
     }
-//    bomb = new InteractiveObject;
-//    bomb->setVertices(MeshGenerator::CubeMaker());
-//    bomb->setPosition(npc->getPosition().x(),npc->getPosition().y(), npc->getPosition().z());
-//    mDrawObjects.push_back(bomb);
 }
 
 void RenderWindow::Movement(float deltaTime)
@@ -564,7 +546,6 @@ void RenderWindow::Movement(float deltaTime)
     cameramesh->setPosition(camPos);
     QVector3D newpos = player->getPosition();
 
-    ////oppgave 6
     if (mToggle == true)
     {
         mActiveCamera = &mCamera1;
@@ -584,7 +565,7 @@ void RenderWindow::Movement(float deltaTime)
         XYZ->setScale(100);
     }
 
-    ////oppgave 14
+
     if (reset == true)
     {
         dot->setPosition(0 + newpos.x(),0 + newpos.y(),2 + newpos.z());
@@ -592,10 +573,6 @@ void RenderWindow::Movement(float deltaTime)
         reset = false;
     }
 
-    ////oppgave 3
-
-//    if (bombNPC != nullptr) {bombNPC->move();}
-//    if (npc != nullptr){npc->move();}
 
     ////Light movement
     if (mLight)
@@ -608,10 +585,6 @@ void RenderWindow::Movement(float deltaTime)
     {
         if(mCurrentInputs[Qt::Key_W])
         {
-//            qDebug() << redTrophy;
-//            qDebug() << "t: " << trophy->getPosition().x() << "t1: " << trophy->getPosition().y();
-//            qDebug() << "p: " << player->getPosition().x() << "p1: " << player->getPosition().y();
-            qDebug() << npc->getPosition();
             auto fwd = mActiveCamera->getForward();
             fwd.setZ(0);
             fwd.normalize();
@@ -630,17 +603,13 @@ void RenderWindow::Movement(float deltaTime)
         {
             if(mCurrentInputs[Qt::Key_A])
             {
-//                player->mMatrix.translate(-newpos);
                 player->rotate(1.f);
                 mActiveCamera->followMouse(1,0);
-//                player->mMatrix.translate(newpos);
             }
             if(mCurrentInputs[Qt::Key_D])
             {
-//                player->mMatrix.translate(-newpos);
                 player->rotate(-1.f);
-                                mActiveCamera->followMouse(-1,0);
-//                player->mMatrix.translate(newpos);
+                mActiveCamera->followMouse(-1,0);
             }
         }
         if(mCurrentInputs[Qt::Key_Space])
@@ -677,7 +646,6 @@ void RenderWindow::Movement(float deltaTime)
     }
 }
 
-////scuffed camera rotating oppgave 5
 void RenderWindow::mousePressEvent(QMouseEvent *event)
 {
     mCurrentInputs[event->button()] = true;
