@@ -134,12 +134,11 @@ public:
     InteractiveObject* graph{nullptr};
     InteractiveObject* plane{nullptr};
     InteractiveObject* dot{nullptr};
-    InteractiveObject* bezier{nullptr};
     InteractiveObject* trophy{nullptr};
-    InteractiveObject* fence{nullptr};
     InteractiveObject* XYZ{nullptr};
     InteractiveObject* cameramesh{nullptr};
     InteractiveObject* circle{nullptr};
+    InteractiveObject* bullet{nullptr};
 
     Light* mLight{nullptr};
     InteractiveObject* ball{nullptr};
@@ -160,7 +159,11 @@ public:
     std::vector<InteractiveObject*> redTrophies;
     bool victory = false;
     float time {0};
+    float bulletTime{0};
     bool right = true;
+    bool playerHit = false;
+    void Trophies();
+    void Turret();
 };
 
 #endif // RENDERWINDOW_H

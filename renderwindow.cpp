@@ -240,6 +240,13 @@ void RenderWindow::createObjects()
      turret->mMatrix.scale(5,5,5);
      mDrawObjects.push_back(turret);
 
+     //bullet
+     bullet = new InteractiveObject;
+     bullet->setVertices(MeshGenerator::GenerateOktahedron(2,{1,1,1}));
+     bullet->setPosition(0,-30,5);
+     bullet->setScale(0.2f);
+     mDrawObjects.push_back(bullet);
+
      /////dot//////
      dot = new InteractiveObject;
      dot->setVertices((MeshGenerator::Dot()));
@@ -273,7 +280,7 @@ void RenderWindow::createObjects()
     cameramesh = new InteractiveObject;
     cameramesh->setVertices(MeshGenerator::createcube());
     cameramesh->setPosition(mCamera1.getForward().x(),mCamera1.getForward().x(), mCamera1.getForward().x());
-    mDrawObjects.push_back(cameramesh);
+    mObjects.push_back(cameramesh);
 }
 
 void RenderWindow::render()
@@ -349,17 +356,19 @@ void RenderWindow::Drawcall()
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
     dot->draw();
 
-    ////bezier
-//    glUseProgram(mShaderProgram[0]->getProgram() );
-//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, bezier->mMatrix.constData());
-//    bezier->draw();
-
     ////npc
     glUseProgram(mShaderProgram[0]->getProgram() );
     mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, npc->mMatrix.constData());
     npc->draw();
+
+    //cameramesh
+    if(mActiveCamera == &mCamera2){
+    glUseProgram(mShaderProgram[0]->getProgram() );
+    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
+    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, cameramesh->mMatrix.constData());
+    cameramesh->draw();
+    }
 
     ////tegner opp objektene i mDrawObjects
     for (auto it=mDrawObjects.begin(); it!= mDrawObjects.end(); it++)
@@ -517,6 +526,12 @@ void RenderWindow::Tick(float deltaTime)
     if (player->getPosition().x() > 0)
     {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //hmmm
 
+    Trophies();
+    Turret();
+}
+
+void RenderWindow::Trophies()
+{
     for (int i = 0; i < blueTrophies.size(); i++)
     {
         if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 1 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 1)
@@ -549,6 +564,24 @@ void RenderWindow::Tick(float deltaTime)
         qDebug() << "npc won";
         victory = true;
     }
+}
+
+//oppgave 8
+void RenderWindow::Turret()
+{
+    if (bulletTime >= 300)
+    {
+    bullet->setPosition(0,-30,5);
+    bulletTime = 0;
+    }
+
+    bullet->move(0,0.1f,0);
+    bulletTime += 1;
+
+    if(abs(player->getPosition().x() - bullet->getPosition().x()) < 1 && abs(player->getPosition().y() - bullet->getPosition().y()) < 1)
+    {playerHit = true;}
+    qDebug() << bullet->getPosition();
+    qDebug() << "time: " << bulletTime;
 }
 
 void RenderWindow::Movement(float deltaTime)
@@ -605,7 +638,7 @@ void RenderWindow::Movement(float deltaTime)
     }
 
     ////Player movement
-    if(player && mActiveCamera == &mCamera1)
+    if(player && mActiveCamera == &mCamera1 && playerHit == false)
     {
         if(mCurrentInputs[Qt::Key_W]) //frem
         {
