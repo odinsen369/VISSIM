@@ -139,6 +139,7 @@ public:
     InteractiveObject* fence{nullptr};
     InteractiveObject* XYZ{nullptr};
     InteractiveObject* cameramesh{nullptr};
+    InteractiveObject* circle{nullptr};
 
     Light* mLight{nullptr};
     InteractiveObject* ball{nullptr};
@@ -150,6 +151,7 @@ public:
     Disc* disc{nullptr};
     NPC* npc{nullptr};
     NPC* bombNPC{nullptr};
+    NPC* turret{nullptr};
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
 

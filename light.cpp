@@ -20,7 +20,6 @@ Light::Light()
 //    });
 
     setVertices(MeshGenerator::GenerateOktahedron(2));
-    mPosition.translate(mOrbitPoint);
     mMatrix.setToIdentity();
 }
 

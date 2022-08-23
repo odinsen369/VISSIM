@@ -203,7 +203,7 @@ void RenderWindow::createObjects()
 
     /////light////// oppgave 3
     mLight = new Light;
-    mLight->mMatrix.translate(10,10,10);
+    mLight->mMatrix.translate(-20,0,15);
     mObjects.push_back(mLight);
 
     /////player///// oppgave 4
@@ -215,21 +215,35 @@ void RenderWindow::createObjects()
 
      /////bakke////// oppgave 2
      bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1); //endre texture number i draw
-     bakke->mMatrix.translate(-15,-25,0); //translate alt med -15,-25,0
-     bakke->mMatrix.scale(1,1,1);
+     bakke->mMatrix.translate(-25,-25,0); //translate alt med -15,-25,0
      mObjects.push_back(bakke);
 
      player->hmfloor = bakke;
 
-     /////dot//////
-//     dot = new InteractiveObject;
-//     dot->setVertices((MeshGenerator::Dot()));
-//     mObjects.push_back(dot);
+     ////oppgave 7
+     circle = new InteractiveObject;
+     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{1,0,0}));
+     circle->mMatrix.translate(-40,0,0);
+     circle->mMatrix.scale(20,20,1);
+     mDrawObjects.push_back(circle);
 
-//    bezier = new InteractiveObject;
-//    bezier->setDrawMethod(DrawMethod::LineStrip);
-//    bezier->setVertices(MeshGenerator::makeBezier(v1,v2,v3,v4));
-//    mObjects.push_back(bezier);
+     circle = new InteractiveObject;
+     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
+     circle->mMatrix.translate(40,0,0);
+     circle->mMatrix.scale(20,20,1);
+     mDrawObjects.push_back(circle);
+
+     //// turret
+     turret = new NPC();
+     turret->setVertices(MeshGenerator::createcube());
+     turret->setPosition(0,-30,5); //xyz
+     turret->mMatrix.scale(5,5,5);
+     mDrawObjects.push_back(turret);
+
+     /////dot//////
+     dot = new InteractiveObject;
+     dot->setVertices((MeshGenerator::Dot()));
+     mObjects.push_back(dot);
 
     /////npc///// oppgave 10
     npc = new NPC();
@@ -237,18 +251,6 @@ void RenderWindow::createObjects()
     npc->setPosition(0,0,1);
     npc->trofe = &redTrophies;
     mObjects.push_back(npc);
-
-
-//    fence = new InteractiveObject;
-//    fence->setVertices(MeshGenerator::Fence());
-//    fence->setPosition(2,3,1);
-//    mDrawObjects.push_back(fence);
-//    fence = new InteractiveObject;
-//    fence->setVertices(MeshGenerator::Fence());
-//    fence->setPosition(10,5,1);
-//    fence->rotate(90.f);
-//    mDrawObjects.push_back(fence);
-
 
     //oppgave 9
     for (int i = 0; i < 20; i++) {
@@ -268,8 +270,6 @@ void RenderWindow::createObjects()
         mDrawObjects.push_back(trophy);
     }
 
-    //spiller har vektor <trophy*> og sjekker etter overlap i tick
-    //loop gjennom lista med trophy og sjekk avstand if overlap, size = 0 og bool pickedUp
     cameramesh = new InteractiveObject;
     cameramesh->setVertices(MeshGenerator::createcube());
     cameramesh->setPosition(mCamera1.getForward().x(),mCamera1.getForward().x(), mCamera1.getForward().x());
@@ -344,10 +344,10 @@ void RenderWindow::Drawcall()
     bakke->draw();
 
     ////dot
-//    glUseProgram(mShaderProgram[0]->getProgram() );
-//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
-//    dot->draw();
+    glUseProgram(mShaderProgram[0]->getProgram() );
+    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
+    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
+    dot->draw();
 
     ////bezier
 //    glUseProgram(mShaderProgram[0]->getProgram() );
@@ -511,6 +511,12 @@ void RenderWindow::Tick(float deltaTime)
     player->Tick(deltaTime);
     Movement(deltaTime);
     npc->Tick(deltaTime);
+
+    if (player->getPosition().x() <= 0)
+    {turret->mMatrix.rotate(abs(turret->getPosition().x()-player->getPosition().x()/60),{0,0,1});}
+    if (player->getPosition().x() > 0)
+    {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //hmmm
+
     for (int i = 0; i < blueTrophies.size(); i++)
     {
         if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 1 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 1)
@@ -583,7 +589,7 @@ void RenderWindow::Movement(float deltaTime)
     ////Light movement
     if (mLight)
     {
-        if (time <= 300 && right == true)
+        if (time <= 450 && right == true)
         {
         mLight->mMatrix.translate(0.1f,0,0);
         time += 1;
@@ -592,7 +598,7 @@ void RenderWindow::Movement(float deltaTime)
         {
         right = false;
         mLight->mMatrix.translate(-0.1f,0,0);
-        time -= 1.f/2.f;
+        time -= 1;
         if (time <= 0)
         {right = true;}
         }
@@ -603,6 +609,8 @@ void RenderWindow::Movement(float deltaTime)
     {
         if(mCurrentInputs[Qt::Key_W]) //frem
         {
+            qDebug() << "player: " << player->getPosition();
+            qDebug() << "turret: " << turret->getPosition();
             auto fwd = mActiveCamera->getForward();
             fwd.setZ(0);
             fwd.normalize();

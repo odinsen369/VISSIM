@@ -19,6 +19,7 @@ public:
         return makeBezier(v1,v2,v3,v4);}
     static std::vector<Vertex> CubeMaker(){
         return createcube();}
+    static std::vector<Vertex> GenerateOktahedron(int divisions, const QVector3D& color){return oktaederUnitBall(divisions,color);}
     static std::vector<Vertex> GenerateOktahedron(int divisions){return oktaederUnitBall(divisions);}
 
     static std::vector<Vertex> Triangle();
