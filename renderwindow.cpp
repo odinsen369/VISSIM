@@ -527,7 +527,7 @@ void RenderWindow::Tick(float deltaTime)
     {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //hmmm
 
     Trophies();
-    Turret();
+    Turret(deltaTime);
 }
 
 void RenderWindow::Trophies()
@@ -567,8 +567,9 @@ void RenderWindow::Trophies()
 }
 
 //oppgave 8
-void RenderWindow::Turret()
+void RenderWindow::Turret(float deltaTime)
 {
+    hitTime += deltaTime;
     if (bulletTime >= 300)
     {
     bullet->setPosition(0,-30,5);
@@ -579,9 +580,16 @@ void RenderWindow::Turret()
     bulletTime += 1;
 
     if(abs(player->getPosition().x() - bullet->getPosition().x()) < 1 && abs(player->getPosition().y() - bullet->getPosition().y()) < 1)
-    {playerHit = true;}
+    {playerHit = true;
+    hitTime = 0;
+    }
     qDebug() << bullet->getPosition();
-    qDebug() << "time: " << bulletTime;
+    qDebug() << "time: " << hitTime;
+    if(hitTime >= 2)
+    {
+     playerHit = false;
+    }
+
 }
 
 void RenderWindow::Movement(float deltaTime)
@@ -622,17 +630,17 @@ void RenderWindow::Movement(float deltaTime)
     ////Light movement
     if (mLight)
     {
-        if (time <= 450 && right == true)
+        if (time <= 4    && right == true)
         {
         mLight->mMatrix.translate(0.1f,0,0);
-        time += 1;
+        time += deltaTime;
         }
         else
         {
         right = false;
         mLight->mMatrix.translate(-0.1f,0,0);
         time -= 1;
-        if (time <= 0)
+        if (deltaTime <= 0)
         {right = true;}
         }
     }

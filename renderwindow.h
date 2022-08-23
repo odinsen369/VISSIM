@@ -160,10 +160,11 @@ public:
     bool victory = false;
     float time {0};
     float bulletTime{0};
+    float hitTime{0};
     bool right = true;
     bool playerHit = false;
     void Trophies();
-    void Turret();
+    void Turret(float deltaTime);
 };
 
 #endif // RENDERWINDOW_H
