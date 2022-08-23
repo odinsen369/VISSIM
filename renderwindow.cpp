@@ -261,8 +261,8 @@ void RenderWindow::createObjects()
 
     //oppgave 9
     for (int i = 0; i < 20; i++) {
-//        Sleep(20); fiks runtime delay
         trophy = new InteractiveObject;
+        trophy->setScale(0);
         trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue"));
         trophy->move(rand() % 30 - 15, rand() % 50 - 25, 5.f);
         if (i % 2 != 0)
@@ -276,6 +276,7 @@ void RenderWindow::createObjects()
         i % 2 == 0 ? redTrophy += 1 : blueTrophy += 1;
         mDrawObjects.push_back(trophy);
     }
+
 
     cameramesh = new InteractiveObject;
     cameramesh->setVertices(MeshGenerator::createcube());
@@ -526,18 +527,32 @@ void RenderWindow::Tick(float deltaTime)
     if (player->getPosition().x() > 0)
     {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //hmmm
 
-    Trophies();
+    Trophies(deltaTime);
     Turret(deltaTime);
 }
 
-void RenderWindow::Trophies()
+void RenderWindow::Trophies(float deltaTime)
 {
+    spawnTimer += deltaTime;
+    for (int i = 0; i < blueTrophies.size();i++)
+    {
+        if (spawnTimer >= 2*i)
+        {
+            if (blueTrophies.at(i) != nullptr)
+            {
+            blueTrophies.at(i)->setScale(1);
+            }
+            if (redTrophies.at(i) != nullptr)
+            {
+            redTrophies.at(i)->setScale(1);
+            }
+        }
+    }
     for (int i = 0; i < blueTrophies.size(); i++)
     {
         if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 1 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 1)
         {
             blueTrophy -= 1;
-            qDebug() << "size :" << blueTrophy;
             blueTrophies.at(i)->setScale(0);
             blueTrophies.at(i) = nullptr;
         }
@@ -548,7 +563,6 @@ void RenderWindow::Trophies()
         if (redTrophies.at(i) != nullptr && abs(npc->getPosition().x() - redTrophies.at(i)->getPosition().x()) < 1 && abs(npc->getPosition().y() - redTrophies.at(i)->getPosition().y()) < 1)
         {
             redTrophy -= 1;
-            qDebug() << "size :" << redTrophy;
             redTrophies.at(i)->setScale(0);
             redTrophies.at(i) = nullptr;
         }
@@ -583,8 +597,6 @@ void RenderWindow::Turret(float deltaTime)
     {playerHit = true;
     hitTime = 0;
     }
-    qDebug() << bullet->getPosition();
-    qDebug() << "time: " << hitTime;
     if(hitTime >= 2)
     {
      playerHit = false;
@@ -630,17 +642,17 @@ void RenderWindow::Movement(float deltaTime)
     ////Light movement
     if (mLight)
     {
-        if (time <= 4    && right == true)
+        if (time <= 350 && right == true)
         {
         mLight->mMatrix.translate(0.1f,0,0);
-        time += deltaTime;
+        time += 1;
         }
         else
         {
         right = false;
         mLight->mMatrix.translate(-0.1f,0,0);
         time -= 1;
-        if (deltaTime <= 0)
+        if (time <= 0)
         {right = true;}
         }
     }

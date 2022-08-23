@@ -19,7 +19,7 @@ Light::Light()
 //      0, 3, 1
 //    });
 
-    setVertices(MeshGenerator::GenerateOktahedron(2));
+    setVertices(MeshGenerator::GenerateOktahedron(2,{1,1,0}));
     mMatrix.setToIdentity();
 }
 

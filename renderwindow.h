@@ -161,9 +161,10 @@ public:
     float time {0};
     float bulletTime{0};
     float hitTime{0};
+    float spawnTimer{0};
     bool right = true;
     bool playerHit = false;
-    void Trophies();
+    void Trophies(float deltaTime);
     void Turret(float deltaTime);
 };
 
