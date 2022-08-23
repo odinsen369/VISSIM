@@ -211,6 +211,7 @@ void RenderWindow::createObjects()
      player->setDrawMethod(DrawMethod::Triangles);
      player->setVertices(MeshGenerator::CubeMaker()); //temp player
      player->hasGravity = true;
+     player->setPosition(50,0,0);
      mObjects.push_back(player);
 
      /////bakke////// oppgave 2
@@ -255,7 +256,7 @@ void RenderWindow::createObjects()
     /////npc///// oppgave 10
     npc = new NPC();
     npc->setVertices(MeshGenerator::createcube());
-    npc->setPosition(0,0,1);
+    npc->setPosition(-30,0,1);
     npc->trofe = &redTrophies;
     mObjects.push_back(npc);
 
@@ -520,13 +521,8 @@ void RenderWindow::Tick(float deltaTime)
     mActiveCamera->Tick(deltaTime);
     player->Tick(deltaTime);
     Movement(deltaTime);
-    npc->Tick(deltaTime);
-
-    if (player->getPosition().x() <= 0)
-    {turret->mMatrix.rotate(abs(turret->getPosition().x()-player->getPosition().x()/60),{0,0,1});}
-    if (player->getPosition().x() > 0)
-    {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //hmmm
-
+    if (npcHit == false)
+    {npc->Tick(deltaTime);}
     Trophies(deltaTime);
     Turret(deltaTime);
 }
@@ -534,6 +530,7 @@ void RenderWindow::Tick(float deltaTime)
 void RenderWindow::Trophies(float deltaTime)
 {
     spawnTimer += deltaTime;
+    //oppgave 9
     for (int i = 0; i < blueTrophies.size();i++)
     {
         if (spawnTimer >= 2*i)
@@ -550,7 +547,7 @@ void RenderWindow::Trophies(float deltaTime)
     }
     for (int i = 0; i < blueTrophies.size(); i++)
     {
-        if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 1 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 1)
+        if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 3 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 3)
         {
             blueTrophy -= 1;
             blueTrophies.at(i)->setScale(0);
@@ -560,7 +557,7 @@ void RenderWindow::Trophies(float deltaTime)
 
     for (int i = 0; i < redTrophies.size(); i++)
     {
-        if (redTrophies.at(i) != nullptr && abs(npc->getPosition().x() - redTrophies.at(i)->getPosition().x()) < 1 && abs(npc->getPosition().y() - redTrophies.at(i)->getPosition().y()) < 1)
+        if (redTrophies.at(i) != nullptr && abs(npc->getPosition().x() - redTrophies.at(i)->getPosition().x()) < 2 && abs(npc->getPosition().y() - redTrophies.at(i)->getPosition().y()) < 2)
         {
             redTrophy -= 1;
             redTrophies.at(i)->setScale(0);
@@ -568,14 +565,17 @@ void RenderWindow::Trophies(float deltaTime)
         }
     }
 
+    //player win
     if (blueTrophy <= 0 && redTrophy > 0 && victory == false)
     {
-        qDebug() << "victory royale";
+        mLogger->logText("player won");
         victory = true;
     }
+
+    //npc win
     if (blueTrophy > 0 && redTrophy <= 0 && victory == false)
     {
-        qDebug() << "npc won";
+        mLogger->logText("npc won");
         victory = true;
     }
 }
@@ -583,14 +583,36 @@ void RenderWindow::Trophies(float deltaTime)
 //oppgave 8
 void RenderWindow::Turret(float deltaTime)
 {
+    if (player->getPosition().x() <= 0)
+    {turret->mMatrix.rotate(abs(turret->getPosition().x()-player->getPosition().x()/60),{0,0,1});}
+    if (player->getPosition().x() > 0)
+    {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //forsøk på rotasjon
+
     hitTime += deltaTime;
-    if (bulletTime >= 300)
+    npcHitTime += deltaTime;
+
+    if (bulletTime >= 500)
     {
     bullet->setPosition(0,-30,5);
+    shotCount += 1;
     bulletTime = 0;
     }
 
-    bullet->move(0,0.1f,0);
+    QVector3D npcDir = npc->getPosition()-turret->getPosition();
+    npcDir.normalize();
+    QVector3D playerDir = player->getPosition()-turret->getPosition();
+    playerDir.normalize();
+
+    if(shotCount % 2 == 0)
+    {
+    bullet->move(npcDir*0.2f);
+    }
+
+    if(shotCount % 2 != 0)
+    {
+    bullet->move(playerDir*0.2f);
+    }
+
     bulletTime += 1;
 
     if(abs(player->getPosition().x() - bullet->getPosition().x()) < 1 && abs(player->getPosition().y() - bullet->getPosition().y()) < 1)
@@ -602,6 +624,14 @@ void RenderWindow::Turret(float deltaTime)
      playerHit = false;
     }
 
+    if(abs(npc->getPosition().x() - bullet->getPosition().x()) < 5 && abs(npc->getPosition().y() - bullet->getPosition().y()) < 5)
+    {npcHit = true;
+    npcHitTime = 0;
+    }
+    if(npcHitTime >= 2)
+    {
+     npcHit = false;
+    }
 }
 
 void RenderWindow::Movement(float deltaTime)
@@ -662,13 +692,11 @@ void RenderWindow::Movement(float deltaTime)
     {
         if(mCurrentInputs[Qt::Key_W]) //frem
         {
-            qDebug() << "player: " << player->getPosition();
-            qDebug() << "turret: " << turret->getPosition();
             auto fwd = mActiveCamera->getForward();
             fwd.setZ(0);
             fwd.normalize();
             fwd = fwd / 5;
-            player->push(fwd,0.03);
+            player->move(fwd);
         }
         if(mCurrentInputs[Qt::Key_S]) //tilbake
         {
@@ -676,7 +704,7 @@ void RenderWindow::Movement(float deltaTime)
             fwd.setZ(0);
             fwd.normalize();
             fwd = fwd / 5;
-            player->push(-fwd,0.1);
+            player->move(-fwd);
         }
         if(mCurrentInputs[Qt::Key_A] || mCurrentInputs[Qt::Key_D])
         {

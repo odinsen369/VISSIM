@@ -82,7 +82,6 @@ void NPC::draw()
 
 void NPC::move()
 {
-//        const static unsigned long long int nanosecondsforassassintooneshotadc = 2;
         static int i = 1;
         static int direction = 1;
         if (i == punkter.size()-1)
