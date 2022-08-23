@@ -547,7 +547,7 @@ void RenderWindow::Trophies(float deltaTime)
     }
     for (int i = 0; i < blueTrophies.size(); i++)
     {
-        if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 3 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 3)
+        if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 2 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 2)
         {
             blueTrophy -= 1;
             blueTrophies.at(i)->setScale(0);
@@ -566,7 +566,7 @@ void RenderWindow::Trophies(float deltaTime)
     }
 
     //player win
-    if (blueTrophy <= 0 && redTrophy > 0 && victory == false)
+    if (blueTrophy <= 0 && redTrophy > 0 && victory == false && player->getPosition().x() >= 40)
     {
         mLogger->logText("player won");
         victory = true;
