@@ -108,6 +108,6 @@ void NPC::Tick(float deltaTime) {
   if (trophyFound != nullptr) {
     QVector3D dir = trophyFound->getPosition() - getPosition();
     dir.normalize();
-    InteractiveObject::move(dir * deltaTime * 5);
+    InteractiveObject::move(dir * deltaTime * 6.5f);
   }
 }

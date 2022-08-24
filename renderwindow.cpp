@@ -566,7 +566,7 @@ void RenderWindow::Trophies(float deltaTime)
     }
 
     //player win
-    if (blueTrophy <= 0 && redTrophy > 0 && victory == false && player->getPosition().x() >= 40)
+    if (blueTrophy <= 0 && redTrophy > 0 && victory == false && player->getPosition().x() >= 35)
     {
         mLogger->logText("player won");
         victory = true;
@@ -591,7 +591,7 @@ void RenderWindow::Turret(float deltaTime)
     hitTime += deltaTime;
     npcHitTime += deltaTime;
 
-    if (bulletTime >= 500)
+    if (bulletTime >= 350)
     {
     bullet->setPosition(0,-30,5);
     shotCount += 1;
@@ -605,7 +605,7 @@ void RenderWindow::Turret(float deltaTime)
 
     if(shotCount % 2 == 0)
     {
-    bullet->move(npcDir*0.2f);
+    bullet->move(npcDir*0.5f);
     }
 
     if(shotCount % 2 != 0)
@@ -615,7 +615,7 @@ void RenderWindow::Turret(float deltaTime)
 
     bulletTime += 1;
 
-    if(abs(player->getPosition().x() - bullet->getPosition().x()) < 1 && abs(player->getPosition().y() - bullet->getPosition().y()) < 1)
+    if(abs(player->getPosition().x() - bullet->getPosition().x()) < 2 && abs(player->getPosition().y() - bullet->getPosition().y()) < 2)
     {playerHit = true;
     hitTime = 0;
     }
