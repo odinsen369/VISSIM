@@ -557,7 +557,7 @@ void RenderWindow::Trophies(float deltaTime)
         }
     }
 
-    //player win
+    //player win oppgave 12
     if (blueTrophyCount <= 0 && redTrophyCount > 0 && victory == false && player->getPosition().x() >= 35)
     {
         mLogger->logText("player won");
