@@ -139,34 +139,37 @@ public:
     InteractiveObject* cameramesh{nullptr};
     InteractiveObject* circle{nullptr};
     InteractiveObject* bullet{nullptr};
-
-    Light* mLight{nullptr};
     InteractiveObject* ball{nullptr};
 
-    Camera mCamera1;
-    Camera mCamera2;
+    Light* mLight{nullptr};
+
+    Camera gameCamera;
+    Camera editorCamera;
     Camera* mActiveCamera{nullptr};
 
     Disc* disc{nullptr};
     NPC* npc{nullptr};
-    NPC* bombNPC{nullptr};
     NPC* turret{nullptr};
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
 
-    int redTrophy {0}, blueTrophy {0};
     std::vector<InteractiveObject*> blueTrophies;
     std::vector<InteractiveObject*> redTrophies;
-    bool victory = false;
+
     float time {0};
-    float bulletTime{0};
+    float bulletAliveTime{0};
     float hitTime{0};
     float npcHitTime{0};
-    float spawnTimer{0};
+    float TrophySpawnTimer{0};
+
     int shotCount{0};
-    bool right = true;
+    int redTrophyCount {0}, blueTrophyCount {0};
+
+    bool goingRight = true;
     bool playerHit = false;
     bool npcHit = false;
+    bool victory = false;
+
     void Trophies(float deltaTime);
     void Turret(float deltaTime);
 };

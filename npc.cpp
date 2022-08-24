@@ -105,6 +105,7 @@ void NPC::Tick(float deltaTime) {
       break;
     }
   }
+  //hvis trofe ikke er nullptr beveger npc seg til det
   if (trophyFound != nullptr) {
     QVector3D dir = trophyFound->getPosition() - getPosition();
     dir.normalize();

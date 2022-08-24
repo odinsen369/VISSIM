@@ -32,7 +32,7 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
 
 {
-    mActiveCamera = &mCamera1;
+    mActiveCamera = &gameCamera;
     //This is sent to QWindow:
     setSurfaceType(QWindow::OpenGLSurface);
     setFormat(format);
@@ -59,16 +59,6 @@ RenderWindow::~RenderWindow()
     glDeleteVertexArrays( 1, &mVAO );
     glDeleteBuffers( 1, &mVBO );
 }
-
-Vertex v1 = {0,0,10,0,1,0};
-Vertex v2 = {10,0,20,1,2,0};
-Vertex v3 = {10,0,0,1,0,0};
-Vertex v4 = {20,0,10,0,1,0};
-
-Vertex p1 = {-5,-25,5,0,1,0};
-Vertex p2 = {25,25,5,1,0,0};
-Vertex p3 = {-25,25,0,1,2,0};
-Vertex p4 = {25,-25,5,0,1,0};
 
 void RenderWindow::init()
 {       
@@ -146,15 +136,15 @@ void RenderWindow::CamOgShaderSetup()
         (*it)->init(mMmatrixUniform0);
 
     // oppgave 5b
-    mCamera1.init(mPmatrixUniform0,mVmatrixUniform0);
-    mCamera1.perspective(80, 4.0/3.0, 0.1, 1000.0);
+    gameCamera.init(mPmatrixUniform0,mVmatrixUniform0);
+    gameCamera.perspective(80, 4.0/3.0, 0.1, 1000.0);
 
     // oppgave 5a
-    mCamera2.init(mPmatrixUniform0,mVmatrixUniform0);
-    mCamera2.perspective(80, 4.0/3.0, 0.1, 1000.0);
+    editorCamera.init(mPmatrixUniform0,mVmatrixUniform0);
+    editorCamera.perspective(80, 4.0/3.0, 0.1, 1000.0);
 
     if (player != nullptr)
-        mActiveCamera->setTarget(player);
+        mActiveCamera->setTarget(player); //setter player som camera sitt target
 }
 
 void RenderWindow::setUpShader(int id)
@@ -191,7 +181,7 @@ void RenderWindow::setUpPhongShader(int id)
 
 void RenderWindow::createObjects()
 {
-    /////xyz//////
+    /////xyz akse//////
     XYZ = new InteractiveObject;
     XYZ->setDrawMethod(DrawMethod::Lines);
     XYZ->setVertices(MeshGenerator::xyz(100));
@@ -199,33 +189,33 @@ void RenderWindow::createObjects()
 
     /////mesh//////
     mesh = new ObjMesh("../3Dprog22konte/Assets/Monkey.obj");
-    mObjects.push_back(mesh);
+    mObjects.push_back(mesh); //spiller sitt mesh
 
     /////light////// oppgave 3
     mLight = new Light;
     mLight->mMatrix.translate(-20,0,15);
-    mObjects.push_back(mLight);
+    mObjects.push_back(mLight); //lager lyset
 
     /////player///// oppgave 4
      player = new InteractiveObject;
      player->setDrawMethod(DrawMethod::Triangles);
-     player->setVertices(MeshGenerator::CubeMaker()); //temp player
+     player->setVertices(MeshGenerator::CubeMaker());
      player->hasGravity = true;
      player->setPosition(50,0,0);
      mObjects.push_back(player);
 
      /////bakke////// oppgave 2
-     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1); //endre texture number i draw
-     bakke->mMatrix.translate(-25,-25,0); //translate alt med -15,-25,0
+     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
+     bakke->mMatrix.translate(-25,-25,0);
      mObjects.push_back(bakke);
 
-     player->hmfloor = bakke;
+     player->hmfloor = bakke; //bakke blir satt som spiller sitt floor
 
      ////oppgave 7
      circle = new InteractiveObject;
      circle->setVertices(MeshGenerator::GenerateOktahedron(2,{1,0,0}));
      circle->mMatrix.translate(-40,0,0);
-     circle->mMatrix.scale(20,20,1);
+     circle->mMatrix.scale(20,20,1); //lager oktahedron og gjør de flate
      mDrawObjects.push_back(circle);
 
      circle = new InteractiveObject;
@@ -237,7 +227,7 @@ void RenderWindow::createObjects()
      //// turret
      turret = new NPC();
      turret->setVertices(MeshGenerator::createcube());
-     turret->setPosition(0,-30,5); //xyz
+     turret->setPosition(0,-30,5);
      turret->mMatrix.scale(5,5,5);
      mDrawObjects.push_back(turret);
 
@@ -257,31 +247,31 @@ void RenderWindow::createObjects()
     npc = new NPC();
     npc->setVertices(MeshGenerator::createcube());
     npc->setPosition(-30,0,1);
-    npc->trofe = &redTrophies;
+    npc->trofe = &redTrophies; //gir npc tilgang til lista med sine trofeer
     mObjects.push_back(npc);
 
     //oppgave 9
     for (int i = 0; i < 20; i++) {
         trophy = new InteractiveObject;
         trophy->setScale(0);
-        trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue"));
+        trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue")); //lager annenhver rød og blå
         trophy->move(rand() % 30 - 15, rand() % 50 - 25, 5.f);
         if (i % 2 != 0)
         {
-            blueTrophies.push_back(trophy);
+            blueTrophies.push_back(trophy); //sender trofeer inn i en vector
         }
         if (i % 2 == 0)
         {
             redTrophies.push_back(trophy);
         }
-        i % 2 == 0 ? redTrophy += 1 : blueTrophy += 1;
+        i % 2 == 0 ? redTrophyCount += 1 : blueTrophyCount += 1;
         mDrawObjects.push_back(trophy);
     }
 
 
     cameramesh = new InteractiveObject;
     cameramesh->setVertices(MeshGenerator::createcube());
-    cameramesh->setPosition(mCamera1.getForward().x(),mCamera1.getForward().x(), mCamera1.getForward().x());
+    cameramesh->setPosition(gameCamera.getForward().x(),gameCamera.getForward().x(), gameCamera.getForward().x());
     mObjects.push_back(cameramesh);
 }
 
@@ -365,7 +355,7 @@ void RenderWindow::Drawcall()
     npc->draw();
 
     //cameramesh
-    if(mActiveCamera == &mCamera2){
+    if(mActiveCamera == &editorCamera){ //lages bare hvis camera er i editormode
     glUseProgram(mShaderProgram[0]->getProgram() );
     mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, cameramesh->mMatrix.constData());
@@ -522,18 +512,20 @@ void RenderWindow::Tick(float deltaTime)
     player->Tick(deltaTime);
     Movement(deltaTime);
     if (npcHit == false)
-    {npc->Tick(deltaTime);}
+    {
+        npc->Tick(deltaTime); //npc kjører ikke hvis bullet hitter
+    }
     Trophies(deltaTime);
     Turret(deltaTime);
 }
 
 void RenderWindow::Trophies(float deltaTime)
 {
-    spawnTimer += deltaTime;
+    TrophySpawnTimer += deltaTime;
     //oppgave 9
     for (int i = 0; i < blueTrophies.size();i++)
     {
-        if (spawnTimer >= 2*i)
+        if (TrophySpawnTimer >= 2*i)
         {
             if (blueTrophies.at(i) != nullptr)
             {
@@ -549,7 +541,7 @@ void RenderWindow::Trophies(float deltaTime)
     {
         if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 2 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 2)
         {
-            blueTrophy -= 1;
+            blueTrophyCount -= 1;
             blueTrophies.at(i)->setScale(0);
             blueTrophies.at(i) = nullptr;
         }
@@ -559,21 +551,21 @@ void RenderWindow::Trophies(float deltaTime)
     {
         if (redTrophies.at(i) != nullptr && abs(npc->getPosition().x() - redTrophies.at(i)->getPosition().x()) < 2 && abs(npc->getPosition().y() - redTrophies.at(i)->getPosition().y()) < 2)
         {
-            redTrophy -= 1;
+            redTrophyCount -= 1;
             redTrophies.at(i)->setScale(0);
             redTrophies.at(i) = nullptr;
         }
     }
 
     //player win
-    if (blueTrophy <= 0 && redTrophy > 0 && victory == false && player->getPosition().x() >= 35)
+    if (blueTrophyCount <= 0 && redTrophyCount > 0 && victory == false && player->getPosition().x() >= 35)
     {
         mLogger->logText("player won");
         victory = true;
     }
 
     //npc win
-    if (blueTrophy > 0 && redTrophy <= 0 && victory == false)
+    if (blueTrophyCount > 0 && redTrophyCount <= 0 && victory == false)
     {
         mLogger->logText("npc won");
         victory = true;
@@ -591,13 +583,14 @@ void RenderWindow::Turret(float deltaTime)
     hitTime += deltaTime;
     npcHitTime += deltaTime;
 
-    if (bulletTime >= 350)
+    if (bulletAliveTime >= 300)
     {
     bullet->setPosition(0,-30,5);
     shotCount += 1;
-    bulletTime = 0;
+    bulletAliveTime = 0;
     }
 
+    //finner npc og player sin retning
     QVector3D npcDir = npc->getPosition()-turret->getPosition();
     npcDir.normalize();
     QVector3D playerDir = player->getPosition()-turret->getPosition();
@@ -607,13 +600,13 @@ void RenderWindow::Turret(float deltaTime)
     {
     bullet->move(npcDir*0.5f);
     }
-
+    //annenhvert skudd på spiller og npc
     if(shotCount % 2 != 0)
     {
-    bullet->move(playerDir*0.2f);
+    bullet->move(playerDir*0.5f);
     }
 
-    bulletTime += 1;
+    bulletAliveTime += 1;
 
     if(abs(player->getPosition().x() - bullet->getPosition().x()) < 2 && abs(player->getPosition().y() - bullet->getPosition().y()) < 2)
     {playerHit = true;
@@ -636,14 +629,14 @@ void RenderWindow::Turret(float deltaTime)
 
 void RenderWindow::Movement(float deltaTime)
 {
-    QVector3D camPos = mCamera1.GetPosition();
+    QVector3D camPos = gameCamera.GetPosition();
     camPos.setZ(camPos.z() - 2);
     cameramesh->setPosition(camPos);
     QVector3D newpos = player->getPosition();
 
     if (mToggle == true)
     {
-        mActiveCamera = &mCamera1;
+        mActiveCamera = &gameCamera;
         if (player != nullptr)
         {
             mActiveCamera->setTarget(player);
@@ -652,7 +645,7 @@ void RenderWindow::Movement(float deltaTime)
     }
     if (mToggle == false)
     {
-        mActiveCamera = &mCamera2;
+        mActiveCamera = &editorCamera;
         if (dot != nullptr)
         {
             mActiveCamera->setTarget(dot);
@@ -672,23 +665,23 @@ void RenderWindow::Movement(float deltaTime)
     ////Light movement
     if (mLight)
     {
-        if (time <= 350 && right == true)
+        if (time <= 350 && goingRight == true)
         {
         mLight->mMatrix.translate(0.1f,0,0);
         time += 1;
         }
         else
         {
-        right = false;
+        goingRight = false;
         mLight->mMatrix.translate(-0.1f,0,0);
         time -= 1;
         if (time <= 0)
-        {right = true;}
+        {goingRight = true;}
         }
     }
 
     ////Player movement
-    if(player && mActiveCamera == &mCamera1 && playerHit == false)
+    if(player && mActiveCamera == &gameCamera && playerHit == false)
     {
         if(mCurrentInputs[Qt::Key_W]) //frem
         {
@@ -725,7 +718,7 @@ void RenderWindow::Movement(float deltaTime)
         }
     }
 
-    if(dot && mActiveCamera == &mCamera2){
+    if(dot && mActiveCamera == &editorCamera){
         if(mCurrentInputs[Qt::Key_W])
         {
             dot->move(0.0f,0.2f,0.0f);
@@ -760,14 +753,14 @@ void RenderWindow::mousePressEvent(QMouseEvent *event)
     {
         if (dot)
         {
-            mCamera2.mPmatrix.rotate(-15,{0,1,0.3});
+            editorCamera.mPmatrix.rotate(-15,{0,1,0.5});
         }
     }
     if (mCurrentInputs[event->button() == Qt::RightButton])
     {
         if (dot)
         {
-            mCamera2.mPmatrix.rotate(15,{0,1,0.3});
+            editorCamera.mPmatrix.rotate(15,{0,1,0.5});
         }
     }
 }
