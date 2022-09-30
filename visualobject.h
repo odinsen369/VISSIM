@@ -7,7 +7,7 @@
 #include "vertex.h"
 
 enum DrawMethod{
-    Triangles = GL_TRIANGLES, LineLoop = GL_LINE_LOOP, LineStrip = GL_LINE_STRIP, Lines = GL_LINES
+    Triangles = GL_TRIANGLES, LineLoop = GL_LINE_LOOP, LineStrip = GL_LINE_STRIP, Lines = GL_LINES, Point = GL_POINT
 };
 
 struct ShaderInfo{

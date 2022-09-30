@@ -39,7 +39,24 @@
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="OpenGLLayout"/>
+     <layout class="QVBoxLayout" name="OpenGLLayout">
+      <item>
+       <widget class="QLineEdit" name="lineTest">
+        <property name="mouseTracking">
+         <bool>false</bool>
+        </property>
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

@@ -18,6 +18,7 @@
 #include "heightmap.h"
 #include "octahedronball.h"
 #include "objmesh.h"
+#include "trianglesurface.h"
 
 class QOpenGLContext;
 class Shader;
@@ -41,6 +42,7 @@ public:
 
     bool mToggle{true};
     bool reset{false};
+    std::string lineTest;
 
 private slots:
     void render();          //the actual render - function
@@ -140,6 +142,8 @@ public:
     InteractiveObject* circle{nullptr};
     InteractiveObject* bullet{nullptr};
     InteractiveObject* ball{nullptr};
+    InteractiveObject* ob3{nullptr};
+    TriangleSurface* trianglebakke{nullptr};
 
     Light* mLight{nullptr};
 

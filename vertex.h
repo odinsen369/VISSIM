@@ -42,6 +42,7 @@ class Vertex {
       void setX(float px);
       void setY(float py);
       void setZ(float pz);
+      void divide();
 
       float getX();
       float getY();

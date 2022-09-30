@@ -142,6 +142,9 @@ void InteractiveObject::push(QVector3D dir, float force)
     mSpeed += dir.normalized() * force;
 }
 
+//gravityValue = gravity;
+
+
 void InteractiveObject::Tick(float deltaTime)
 {
     if (hasGravity)

@@ -30,7 +30,7 @@ void TriangleSurface::writeFile(std::string filnavn)
 
 void TriangleSurface::readFile(std::string filnavn) {
     std::ifstream fil;
-    fil.open("../3Dprog22kontekonte/"+filnavn); //åpner oblig1.txt
+    fil.open("../3Dprog22konte/"+filnavn);
     if (fil.is_open()) {
         int count;
         Vertex vertex;
@@ -38,6 +38,7 @@ void TriangleSurface::readFile(std::string filnavn) {
         mVertices.reserve(count);
         for (int i=0; i<count; i++) {
              fil >> vertex;
+             //vertex.divide();
              mVertices.push_back(vertex); //sender vertexene fra tekstfila inn i mVertices
         }
         fil.close();
@@ -81,7 +82,7 @@ void TriangleSurface::draw()
 {
     glBindVertexArray( mVAO );
     glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
+    glDrawArrays(GL_POINTS, 0, mVertices.size());
 }
 
 void TriangleSurface::construct(double (f)(double, double))

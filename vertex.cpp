@@ -80,6 +80,11 @@ void Vertex::setZ(float pz)
     m_xyz[2] = pz;
 }
 
+void Vertex::divide()
+{
+    m_xyz[1] /= 10;
+}
+
 float Vertex::getX()
 {
     return m_xyz[0];

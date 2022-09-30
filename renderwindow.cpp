@@ -200,29 +200,38 @@ void RenderWindow::createObjects()
      player = new InteractiveObject;
      player->setDrawMethod(DrawMethod::Triangles);
      player->setVertices(MeshGenerator::CubeMaker());
-     player->hasGravity = true;
+     //player->hasGravity = true;
      player->setPosition(50,0,0);
      mObjects.push_back(player);
 
-     /////bakke////// oppgave 2
-     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
-     bakke->mMatrix.translate(-25,-25,0);
-     mObjects.push_back(bakke);
+     ////oblig 3 fysikk
+//     ob3 = new InteractiveObject;
+//     ob3->setDrawMethod(DrawMethod::Triangles);
+//     ob3->setVertices(MeshGenerator::GenerateOktahedron(2));
+//     ob3->hasGravity = true;
+//     ob3->setPosition(50,0,10);
+//     mObjects.push_back(ob3);
 
-     player->hmfloor = bakke; //bakke blir satt som spiller sitt floor
+//     /////bakke////// oppgave 2
+//     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
+//     bakke->mMatrix.translate(-25,-25,0);
+//     mObjects.push_back(bakke);
+
+//     player->hmfloor = bakke; //bakke blir satt som spiller sitt floor
+//     ob3->hmfloor = bakke;
 
      ////oppgave 7
-     circle = new InteractiveObject;
-     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{1,0,0}));
-     circle->mMatrix.translate(-40,0,0);
-     circle->mMatrix.scale(20,20,1); //lager oktahedron og gjør de flate
-     mDrawObjects.push_back(circle);
+//     circle = new InteractiveObject;
+//     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{1,0,0}));
+//     circle->mMatrix.translate(-40,0,0);
+//     circle->mMatrix.scale(20,20,1); //lager oktahedron og gjør de flate
+//     mDrawObjects.push_back(circle);
 
-     circle = new InteractiveObject;
-     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
-     circle->mMatrix.translate(40,0,0);
-     circle->mMatrix.scale(20,20,1);
-     mDrawObjects.push_back(circle);
+//     circle = new InteractiveObject;
+//     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
+//     circle->mMatrix.translate(40,0,0);
+//     circle->mMatrix.scale(20,20,1);
+//     mDrawObjects.push_back(circle);
 
      //// turret
      turret = new NPC();
@@ -249,6 +258,11 @@ void RenderWindow::createObjects()
     npc->setPosition(-30,0,1);
     npc->trofe = &redTrophies; //gir npc tilgang til lista med sine trofeer
     mObjects.push_back(npc);
+
+    trianglebakke = new TriangleSurface("newLas.txt");
+    trianglebakke->mMatrix.translate(-506550,-6882300,-660);
+    //vurder å adde den lille las fila for å fylle hullet i bakken
+    mDrawObjects.push_back(trianglebakke);
 
     //oppgave 9
     for (int i = 0; i < 20; i++) {
@@ -312,6 +326,12 @@ void RenderWindow::Drawcall()
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, XYZ->mMatrix.constData());
     XYZ->draw();
 
+    //ob3 fysikk
+//    glUseProgram(mShaderProgram[0]->getProgram() );
+//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
+//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, ob3->mMatrix.constData());
+//    ob3->draw();
+
     ////player oppgave 4
     glUseProgram(mShaderProgram[2]->getProgram());
     glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
@@ -328,19 +348,19 @@ void RenderWindow::Drawcall()
     mesh->draw();
 
     ////oppgave 2 (bakke)
-    glUseProgram(mShaderProgram[2]->getProgram());
-    glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
-    glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
-    glUniformMatrix4fv( mMmatrixUniform2, 1, GL_FALSE, bakke->mMatrix.constData());
+//    glUseProgram(mShaderProgram[2]->getProgram());
+//    glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
+//    glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
+//    glUniformMatrix4fv( mMmatrixUniform2, 1, GL_FALSE, bakke->mMatrix.constData());
 
-    glUniform3f(mLightPositionUniform, mLight->mMatrix.column(3).x(), mLight->mMatrix.column(3).y(),
-    mLight->mMatrix.column(3).z());
-    glUniform3f(mCameraPositionUniform, mActiveCamera->GetPosition().x(), mActiveCamera->GetPosition().y(), mActiveCamera->GetPosition().z());
-    glUniform3f(mLightColorUniform, mLight->mLightColor.x(), mLight->mLightColor.y(), mLight->mLightColor.z());
-    glUniform1f(mSpecularStrengthUniform, mLight->mSpecularStrenght);
+//    glUniform3f(mLightPositionUniform, mLight->mMatrix.column(3).x(), mLight->mMatrix.column(3).y(),
+//    mLight->mMatrix.column(3).z());
+//    glUniform3f(mCameraPositionUniform, mActiveCamera->GetPosition().x(), mActiveCamera->GetPosition().y(), mActiveCamera->GetPosition().z());
+//    glUniform3f(mLightColorUniform, mLight->mLightColor.x(), mLight->mLightColor.y(), mLight->mLightColor.z());
+//    glUniform1f(mSpecularStrengthUniform, mLight->mSpecularStrenght);
 
-    glUniform1i(mTextureUniform2, 3); // 3 her bruker texture 3
-    bakke->draw();
+//    glUniform1i(mTextureUniform2, 3); // 3 her bruker texture 3
+//    bakke->draw();
 
     ////dot
     glUseProgram(mShaderProgram[0]->getProgram() );
@@ -510,6 +530,7 @@ void RenderWindow::Tick(float deltaTime)
 {
     mActiveCamera->Tick(deltaTime);
     player->Tick(deltaTime);
+    if(ob3) {ob3->Tick(deltaTime);}
     Movement(deltaTime);
     if (npcHit == false)
     {
@@ -661,6 +682,11 @@ void RenderWindow::Movement(float deltaTime)
         reset = false;
     }
 
+        std::string test = lineTest;
+        std::cout << lineTest;
+
+        if (lineTest != " ")
+
 
     ////Light movement
     if (mLight)
@@ -698,6 +724,24 @@ void RenderWindow::Movement(float deltaTime)
             fwd.normalize();
             fwd = fwd / 5;
             player->move(-fwd);
+        }
+        if(mCurrentInputs[Qt::Key_Q])
+        {
+            auto u = mActiveCamera->getUp();
+//            u.setY(0);
+            u.normalize();
+            u = u/3;
+            player->move(-u);
+            qDebug() << player->getPosition();
+        }
+        if(mCurrentInputs[Qt::Key_E])
+        {
+            auto u = mActiveCamera->getUp();
+//            u.setY(0);
+            u.normalize();
+            u = u/3;
+            player->move(u);
+            qDebug() << player->getPosition();
         }
         if(mCurrentInputs[Qt::Key_A] || mCurrentInputs[Qt::Key_D])
         {
