@@ -105,10 +105,6 @@ void MainWindow::on_Reset_toggled(bool checked)
     }
 }
 
-void MainWindow::xCords(std::string input)
-{
-    mRenderWindow->lineTest = input;
-}
 
 //File menu Exit closes the program
 void MainWindow::on_fileExit_triggered()

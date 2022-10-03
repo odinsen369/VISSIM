@@ -261,7 +261,6 @@ void RenderWindow::createObjects()
 
     trianglebakke = new TriangleSurface("newLas.txt");
     trianglebakke->mMatrix.translate(-506550,-6882300,-660);
-    //vurder å adde den lille las fila for å fylle hullet i bakken
     mDrawObjects.push_back(trianglebakke);
 
     //oppgave 9
@@ -682,12 +681,6 @@ void RenderWindow::Movement(float deltaTime)
         reset = false;
     }
 
-        std::string test = lineTest;
-        std::cout << lineTest;
-
-        if (lineTest != " ")
-
-
     ////Light movement
     if (mLight)
     {
@@ -732,7 +725,6 @@ void RenderWindow::Movement(float deltaTime)
             u.normalize();
             u = u/3;
             player->move(-u);
-            qDebug() << player->getPosition();
         }
         if(mCurrentInputs[Qt::Key_E])
         {
@@ -741,7 +733,6 @@ void RenderWindow::Movement(float deltaTime)
             u.normalize();
             u = u/3;
             player->move(u);
-            qDebug() << player->getPosition();
         }
         if(mCurrentInputs[Qt::Key_A] || mCurrentInputs[Qt::Key_D])
         {

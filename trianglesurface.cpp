@@ -28,6 +28,40 @@ void TriangleSurface::writeFile(std::string filnavn)
     }
 }
 
+void TriangleSurface::triangulate()
+{
+    float h = 5.f;
+    for (auto x=xMin; x<xMax; x+=h)
+    {
+        for (auto y=yMin; y<yMax; y+=h)
+        {
+            float height = 0;
+            int amount = 0;
+            for (int i = 0; i < trianguler.size(); i++)
+            {
+                if (abs(trianguler.at(i).getX()-x) < h && abs(trianguler.at(i).getY()-y) < h)
+                {
+                    height += trianguler.at(i).getZ();
+                    amount += 1;
+                }
+            }
+            height = height/amount;
+//            Vertex verdier = {x+(h/2),y+(h/2),height,1,1,1,1,1};
+//            mVertices.push_back(verdier);
+
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2),height+(height-oldHeight),x,y,height});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),height,x,y,height});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,height,x,y,height});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,height,x,y,height});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),height,x,y,height});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2)+h,height+(height-oldHeight),x,y,height});
+
+            oldHeight = height;
+            //finne duplicate edges og plusse de sammen / 2
+        }
+    }
+}
+
 void TriangleSurface::readFile(std::string filnavn) {
     std::ifstream fil;
     fil.open("../3Dprog22konte/"+filnavn);
@@ -36,14 +70,30 @@ void TriangleSurface::readFile(std::string filnavn) {
         Vertex vertex;
         fil >> count;
         mVertices.reserve(count);
+        float tempMinY;
+        float tempMinX;
         for (int i=0; i<count; i++) {
              fil >> vertex;
              //vertex.divide();
-             mVertices.push_back(vertex); //sender vertexene fra tekstfila inn i mVertices
+
+             float x = vertex.getX();
+             float y = vertex.getY();
+
+             if (x > xMax){xMax = x;}
+             if (y > yMax){yMax = y;}
+
+             tempMinX = x;
+             if (tempMinX < xMin){xMin = tempMinX;}
+
+             tempMinY = y;
+             if (tempMinY < yMin){yMin = tempMinY;}
+             trianguler.push_back(vertex);
+//             mVertices.push_back(vertex); //sender vertexene fra tekstfila inn i mVertices
         }
         fil.close();
     }
     mMatrix.setToIdentity();
+    triangulate();
 }
 
 void TriangleSurface::init(GLint matrixUniform)
@@ -82,7 +132,7 @@ void TriangleSurface::draw()
 {
     glBindVertexArray( mVAO );
     glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawArrays(GL_POINTS, 0, mVertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
 }
 
 void TriangleSurface::construct(double (f)(double, double))

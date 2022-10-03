@@ -18,9 +18,18 @@ public:
    void draw() override;
    void construct(double (f)(double,double));
    void solveIntegral(double(f)(double,double));
+   void triangulate();
    static double funksjon(double x,double y);
    static double titty(double x,double y);
    static double ob2(double x,double y);
+
+   std::vector<Vertex> trianguler;
+
+   float xMin{99999999.f};
+   float xMax{0};
+   float yMin{99999999.f};
+   float yMax{0};
+   float oldHeight{660.f};
 };
 
 #endif // TRIANGLESURFACE_H

@@ -42,7 +42,6 @@ public:
 
     bool mToggle{true};
     bool reset{false};
-    std::string lineTest;
 
 private slots:
     void render();          //the actual render - function
