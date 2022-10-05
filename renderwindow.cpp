@@ -253,7 +253,7 @@ void RenderWindow::createObjects()
 //    mObjects.push_back(npc);
 
     trianglebakke = new terrain("newLas.txt");
-    trianglebakke->mMatrix.translate(-506550,-6882420,-660); //-506550,-6882300,-660
+    trianglebakke->mMatrix.translate(-506550,-6882300,-660);
     mDrawObjects.push_back(trianglebakke);
 
         for (int i = 0; i < 1000; i++)
@@ -261,7 +261,7 @@ void RenderWindow::createObjects()
             regn = new InteractiveObject;
             regn->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
             regn->setHeight(80);
-            regn->move(rand() % 2500,rand() % 250, rand() % 10);
+            regn->move(rand() % 250,rand() % 250, rand() % 10);
             regn->hasGravity = true;
             regn->setScale(0.4);
             regnliste.push_back(regn);

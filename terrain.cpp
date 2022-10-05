@@ -50,7 +50,7 @@ void terrain::readFile(std::string filnavn) {
 
 void terrain::triangulate()
 {
-    float h = 10.f;
+    float h = 5.f;
     for (auto x=xMin; x<xMax; x+=h)
     {
         for (auto y=yMin; y<yMax; y+=h)
