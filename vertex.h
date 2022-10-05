@@ -29,6 +29,7 @@ class Vertex {
     float m_xyz[3];       	// position i 3D
     float m_normal[3];    // normal in 3D or rgb colors
     float m_st[2];        	// texture coordinates if used
+    int m_neighbour[1];
 
       Vertex();
       Vertex(float x, float y, float z, float r, float g, float b);
@@ -38,11 +39,13 @@ class Vertex {
       Vertex(QVector3D a, QVector3D b, QVector2D c);
       Vertex(float x, float y, float z, float r, float g, float b, float s, float t);
       Vertex(QVector3D xyz, QVector3D rgb, float u, float v);
+      Vertex(QVector3D xyz, QVector3D rgb);
 
       void setX(float px);
       void setY(float py);
       void setZ(float pz);
       void divide();
+      void setNeighbour(int a);
 
       float getX();
       float getY();

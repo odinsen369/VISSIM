@@ -19,6 +19,7 @@
 #include "octahedronball.h"
 #include "objmesh.h"
 #include "trianglesurface.h"
+#include "terrain.h"
 
 class QOpenGLContext;
 class Shader;
@@ -142,7 +143,8 @@ public:
     InteractiveObject* bullet{nullptr};
     InteractiveObject* ball{nullptr};
     InteractiveObject* ob3{nullptr};
-    TriangleSurface* trianglebakke{nullptr};
+    terrain* trianglebakke{nullptr};
+    InteractiveObject* regn{nullptr};
 
     Light* mLight{nullptr};
 
@@ -164,6 +166,7 @@ public:
     float hitTime{0};
     float npcHitTime{0};
     float TrophySpawnTimer{0};
+    float regnTimer{0};
 
     int shotCount{0};
     int redTrophyCount {0}, blueTrophyCount {0};
@@ -172,9 +175,12 @@ public:
     bool playerHit = false;
     bool npcHit = false;
     bool victory = false;
+    bool balldrop = false;
 
     void Trophies(float deltaTime);
     void Turret(float deltaTime);
+
+    std::vector<InteractiveObject*> regnliste;
 };
 
 #endif // RENDERWINDOW_H

@@ -21,6 +21,7 @@ SOURCES += main.cpp \
     octahedronball.cpp \
     renderwindow.cpp \
     shader.cpp \
+    terrain.cpp \
     tetrahedron.cpp \
     texture.cpp \
     trianglesurface.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     octahedronball.h \
     renderwindow.h \
     shader.h \
+    terrain.h \
     tetrahedron.h \
     texture.h \
     trianglesurface.h \

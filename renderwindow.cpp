@@ -25,6 +25,7 @@
 #include <QMouseEvent>
 #include "heightmap.h"
 #include "objmesh.h"
+#include "terrain.h"
 
 //brukte kode fra aleksander sin branch på github (som jeg var med å jobbe på for obliger)
 
@@ -201,16 +202,8 @@ void RenderWindow::createObjects()
      player->setDrawMethod(DrawMethod::Triangles);
      player->setVertices(MeshGenerator::CubeMaker());
      //player->hasGravity = true;
-     player->setPosition(50,0,0);
+     player->setPosition(0,0,0);
      mObjects.push_back(player);
-
-     ////oblig 3 fysikk
-//     ob3 = new InteractiveObject;
-//     ob3->setDrawMethod(DrawMethod::Triangles);
-//     ob3->setVertices(MeshGenerator::GenerateOktahedron(2));
-//     ob3->hasGravity = true;
-//     ob3->setPosition(50,0,10);
-//     mObjects.push_back(ob3);
 
 //     /////bakke////// oppgave 2
 //     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
@@ -259,9 +252,21 @@ void RenderWindow::createObjects()
     npc->trofe = &redTrophies; //gir npc tilgang til lista med sine trofeer
     mObjects.push_back(npc);
 
-    trianglebakke = new TriangleSurface("newLas.txt");
-    trianglebakke->mMatrix.translate(-506550,-6882300,-660);
+    trianglebakke = new terrain("newLas.txt");
+    trianglebakke->mMatrix.translate(-506550,-6882420,-660); //-506550,-6882300,-660
     mDrawObjects.push_back(trianglebakke);
+
+        for (int i = 0; i < 100; i++)
+        {
+            regn = new InteractiveObject;
+            regn->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
+            regn->setHeight(30);
+            regn->move(rand() % 100,rand() % 100, rand() % 10);
+            regn->hasGravity = true;
+            regnliste.push_back(regn);
+            mDrawObjects.push_back(regn);
+        }
+
 
     //oppgave 9
     for (int i = 0; i < 20; i++) {
@@ -324,12 +329,6 @@ void RenderWindow::Drawcall()
     mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, XYZ->mMatrix.constData());
     XYZ->draw();
-
-    //ob3 fysikk
-//    glUseProgram(mShaderProgram[0]->getProgram() );
-//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, ob3->mMatrix.constData());
-//    ob3->draw();
 
     ////player oppgave 4
     glUseProgram(mShaderProgram[2]->getProgram());
@@ -537,6 +536,18 @@ void RenderWindow::Tick(float deltaTime)
     }
     Trophies(deltaTime);
     Turret(deltaTime);
+
+    if (regn)
+    {
+        regnTimer += deltaTime;
+        for (int i = 0; i < regnliste.size(); i++)
+        {
+            if (regnTimer >= i/2)
+            {
+        regnliste.at(i)->Tick(deltaTime);
+            }
+        }
+    }
 }
 
 void RenderWindow::Trophies(float deltaTime)
@@ -696,6 +707,14 @@ void RenderWindow::Movement(float deltaTime)
         time -= 1;
         if (time <= 0)
         {goingRight = true;}
+        }
+    }
+
+    if(regn)
+    {
+        if(mCurrentInputs[Qt::Key_H])
+        {
+            balldrop = true;
         }
     }
 

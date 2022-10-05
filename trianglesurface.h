@@ -30,6 +30,8 @@ public:
    float yMin{99999999.f};
    float yMax{0};
    float oldHeight{660.f};
+   int width{0};
+   int height{0};
 };
 
 #endif // TRIANGLESURFACE_H

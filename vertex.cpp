@@ -65,6 +65,12 @@ Vertex::Vertex(QVector3D xyz, QVector3D rgb, float u, float v)
 {
 
 }
+
+Vertex::Vertex(QVector3D xyz, QVector3D rgb)
+:m_xyz{xyz.x(), xyz.y(), xyz.z()}, m_normal{rgb.x(), rgb.y(), rgb.z()}
+{
+
+}
 void Vertex::setX(float px)
 {
     m_xyz[0] = px;
@@ -98,6 +104,11 @@ float Vertex::getY()
 float Vertex::getZ()
 {
     return m_xyz[2];
+}
+
+void Vertex::setNeighbour(int a)
+{
+    m_neighbour[0] = a;
 }
 
 std::ostream& operator<< (std::ostream& os, const Vertex& v) {

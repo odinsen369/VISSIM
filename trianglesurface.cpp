@@ -35,31 +35,44 @@ void TriangleSurface::triangulate()
     {
         for (auto y=yMin; y<yMax; y+=h)
         {
-            float height = 0;
+            float z = 0;
             int amount = 0;
             for (int i = 0; i < trianguler.size(); i++)
             {
                 if (abs(trianguler.at(i).getX()-x) < h && abs(trianguler.at(i).getY()-y) < h)
                 {
-                    height += trianguler.at(i).getZ();
+                    z += trianguler.at(i).getZ();
                     amount += 1;
                 }
             }
-            height = height/amount;
-//            Vertex verdier = {x+(h/2),y+(h/2),height,1,1,1,1,1};
-//            mVertices.push_back(verdier);
+//            height += 1;
+            z = z/amount;
 
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2),height+(height-oldHeight),x,y,height});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),height,x,y,height});
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,height,x,y,height});
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,height,x,y,height});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),height,x,y,height});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2)+h,height+(height-oldHeight),x,y,height});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2),z+(z-oldHeight),x,y,z});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,x,y,z});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,x,y,z});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,x,y,z});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,x,y,z});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2)+h,z+(z-oldHeight),x,y,z});
 
-            oldHeight = height;
+            oldHeight = z;
             //finne duplicate edges og plusse de sammen / 2
         }
+        width += 1;
     }
+    height = height/width;
+
+//    std::vector<unsigned int> indices;
+//    for(unsigned int i = 0; i < height-1; i++)       // for each row a.k.a. each strip
+//    {
+//        for(unsigned int j = 0; j < width; j++)      // for each column
+//        {
+//            for(unsigned int k = 0; k < 2; k++)      // for each side of the strip
+//            {
+//                indices.push_back(j + width * (i + k));
+//            }
+//        }
+//    }
 }
 
 void TriangleSurface::readFile(std::string filnavn) {
