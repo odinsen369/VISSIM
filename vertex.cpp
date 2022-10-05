@@ -111,6 +111,11 @@ void Vertex::setNeighbour(int a)
     m_neighbour[0] = a;
 }
 
+QVector3D Vertex::getXYZ()
+{
+    return QVector3D{m_xyz[0], m_xyz[1], m_xyz[2]};
+}
+
 std::ostream& operator<< (std::ostream& os, const Vertex& v) {
   os << std::fixed;
   os << "(" << v.m_xyz[0] << ", " << v.m_xyz[1] << ", " << v.m_xyz[2] << ") ";

@@ -20,6 +20,7 @@ SOURCES += main.cpp \
     objmesh.cpp \
     octahedronball.cpp \
     renderwindow.cpp \
+    rollingball.cpp \
     shader.cpp \
     terrain.cpp \
     tetrahedron.cpp \
@@ -29,6 +30,8 @@ SOURCES += main.cpp \
     visualobject.cpp
 
 HEADERS += \
+    Triangle.h \
+    Vector3d.h \
     camera.h \
     cube.h \
     disc.h \
@@ -43,6 +46,7 @@ HEADERS += \
     objmesh.h \
     octahedronball.h \
     renderwindow.h \
+    rollingball.h \
     shader.h \
     terrain.h \
     tetrahedron.h \

@@ -40,6 +40,7 @@ class Vertex {
       Vertex(float x, float y, float z, float r, float g, float b, float s, float t);
       Vertex(QVector3D xyz, QVector3D rgb, float u, float v);
       Vertex(QVector3D xyz, QVector3D rgb);
+      QVector3D getXYZ();
 
       void setX(float px);
       void setY(float py);
