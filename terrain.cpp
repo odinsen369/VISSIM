@@ -50,7 +50,7 @@ void terrain::readFile(std::string filnavn) {
 
 void terrain::triangulate()
 {
-    float h = 5.f;
+    float h = 10.f;
     for (auto x=xMin; x<xMax; x+=h)
     {
         for (auto y=yMin; y<yMax; y+=h)
@@ -68,12 +68,12 @@ void terrain::triangulate()
             height += 1;
             z = z/amount;
 
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2),z,0,0,0});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,1,0,0});
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,0,0,0});
-            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,0,0,0});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,0,1,0});
-            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2)+h,z,0,0,0});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2),z,0,0.4,0});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,0,0.5,0});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,0,0.6,0});
+            mVertices.push_back(Vertex{x+(h/2),y+(h/2)+h,z,0,0.5,0});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2),z,0,0.4,0});
+            mVertices.push_back(Vertex{x+(h/2)+h,y+(h/2)+h,z,0,0.6,0});
         }
         width += 1;
     }

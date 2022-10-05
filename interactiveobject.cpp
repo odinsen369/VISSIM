@@ -168,7 +168,11 @@ void InteractiveObject::Tick(float deltaTime)
         }
         else if (mz < mFloorLevel+1) {
             //setHeight(mFloorLevel+1);
-            mSpeed.setZ(-mSpeed.z());
+            mSpeed.setZ(/*-mSpeed.z()*/0);
+            if(hasGravity)
+            {
+                setScale(0);
+            }
             mIsOnGround = true;
         }
         else {
