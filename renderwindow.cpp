@@ -11,11 +11,8 @@
 #include "shader.h"
 #include "mainwindow.h"
 #include "logger.h"
-//#include "tetrahedron.h"
 #include "trianglesurface.h"
 #include "octahedronball.h"
-//#include "disc.h"
-//#include "npc.h"
 #include "cube.h"
 #include "meshgenerator.h"
 #include "graphmaker.h"
@@ -205,87 +202,16 @@ void RenderWindow::createObjects()
      mObjects.push_back(player);
 
 //     /////bakke////// oppgave 2
-//     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
-//     bakke->mMatrix.translate(-25,-25,0);
-//     mObjects.push_back(bakke);
+     bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
+     bakke->mMatrix.translate(-25,-25,0);
+     mObjects.push_back(bakke);
 
-//     player->hmfloor = bakke; //bakke blir satt som spiller sitt floor
-//     ob3->hmfloor = bakke;
-
-     ////oppgave 7
-//     circle = new InteractiveObject;
-//     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{1,0,0}));
-//     circle->mMatrix.translate(-40,0,0);
-//     circle->mMatrix.scale(20,20,1); //lager oktahedron og gjør de flate
-//     mDrawObjects.push_back(circle);
-
-//     circle = new InteractiveObject;
-//     circle->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
-//     circle->mMatrix.translate(40,0,0);
-//     circle->mMatrix.scale(20,20,1);
-//     mDrawObjects.push_back(circle);
-
-//     //// turret
-//     turret = new NPC();
-//     turret->setVertices(MeshGenerator::createcube());
-//     turret->setPosition(0,-30,5);
-//     turret->mMatrix.scale(5,5,5);
-//     mDrawObjects.push_back(turret);
-
-//     //bullet
-//     bullet = new InteractiveObject;
-//     bullet->setVertices(MeshGenerator::GenerateOktahedron(2,{1,1,1}));
-//     bullet->setPosition(0,-30,5);
-//     bullet->setScale(0.2f);
-//     mDrawObjects.push_back(bullet);
+     player->hmfloor = bakke; //bakke blir satt som spiller sitt floor
 
      /////dot//////
      dot = new InteractiveObject;
      dot->setVertices((MeshGenerator::Dot()));
      mObjects.push_back(dot);
-
-    /////npc///// oppgave 10
-//    npc = new NPC();
-//    npc->setVertices(MeshGenerator::createcube());
-//    npc->setPosition(-30,0,1);
-//    npc->trofe = &redTrophies; //gir npc tilgang til lista med sine trofeer
-//    mObjects.push_back(npc);
-
-    trianglebakke = new terrain("newLas.txt");
-    trianglebakke->mMatrix.translate(-506550,-6882300,-660);
-    mDrawObjects.push_back(trianglebakke);
-
-        for (int i = 0; i < 1000; i++)
-        {
-            regn = new InteractiveObject;
-            regn->setVertices(MeshGenerator::GenerateOktahedron(2,{0,0,1}));
-            regn->setHeight(80);
-            regn->move(rand() % 250,rand() % 250, rand() % 10);
-            regn->hasGravity = true;
-            regn->setScale(0.4);
-            regnliste.push_back(regn);
-            mDrawObjects.push_back(regn);
-        }
-
-
-    //oppgave 9
-//    for (int i = 0; i < 20; i++) {
-//        trophy = new InteractiveObject;
-//        trophy->setScale(0);
-//        trophy->setVertices(MeshGenerator::createColoredCube(i % 2 == 0 ? "red" : "blue")); //lager annenhver rød og blå
-//        trophy->move(rand() % 30 - 15, rand() % 50 - 25, 5.f);
-//        if (i % 2 != 0)
-//        {
-//            blueTrophies.push_back(trophy); //sender trofeer inn i en vector
-//        }
-//        if (i % 2 == 0)
-//        {
-//            redTrophies.push_back(trophy);
-//        }
-//        i % 2 == 0 ? redTrophyCount += 1 : blueTrophyCount += 1;
-//        mDrawObjects.push_back(trophy);
-//    }
-
 
     cameramesh = new InteractiveObject;
     cameramesh->setVertices(MeshGenerator::createcube());
@@ -346,31 +272,25 @@ void RenderWindow::Drawcall()
     mesh->draw();
 
     ////oppgave 2 (bakke)
-//    glUseProgram(mShaderProgram[2]->getProgram());
-//    glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
-//    glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
-//    glUniformMatrix4fv( mMmatrixUniform2, 1, GL_FALSE, bakke->mMatrix.constData());
+    glUseProgram(mShaderProgram[2]->getProgram());
+    glUniformMatrix4fv( mVmatrixUniform2, 1, GL_FALSE, mActiveCamera->mVmatrix.constData());
+    glUniformMatrix4fv( mPmatrixUniform2, 1, GL_FALSE, mActiveCamera->mPmatrix.constData());
+    glUniformMatrix4fv( mMmatrixUniform2, 1, GL_FALSE, bakke->mMatrix.constData());
 
-//    glUniform3f(mLightPositionUniform, mLight->mMatrix.column(3).x(), mLight->mMatrix.column(3).y(),
-//    mLight->mMatrix.column(3).z());
-//    glUniform3f(mCameraPositionUniform, mActiveCamera->GetPosition().x(), mActiveCamera->GetPosition().y(), mActiveCamera->GetPosition().z());
-//    glUniform3f(mLightColorUniform, mLight->mLightColor.x(), mLight->mLightColor.y(), mLight->mLightColor.z());
-//    glUniform1f(mSpecularStrengthUniform, mLight->mSpecularStrenght);
+    glUniform3f(mLightPositionUniform, mLight->mMatrix.column(3).x(), mLight->mMatrix.column(3).y(),
+    mLight->mMatrix.column(3).z());
+    glUniform3f(mCameraPositionUniform, mActiveCamera->GetPosition().x(), mActiveCamera->GetPosition().y(), mActiveCamera->GetPosition().z());
+    glUniform3f(mLightColorUniform, mLight->mLightColor.x(), mLight->mLightColor.y(), mLight->mLightColor.z());
+    glUniform1f(mSpecularStrengthUniform, mLight->mSpecularStrenght);
 
-//    glUniform1i(mTextureUniform2, 3); // 3 her bruker texture 3
-//    bakke->draw();
+    glUniform1i(mTextureUniform2, 3); // 3 her bruker texture 3
+    bakke->draw();
 
     ////dot
     glUseProgram(mShaderProgram[0]->getProgram() );
     mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
     glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, dot->mMatrix.constData());
     dot->draw();
-
-    ////npc
-//    glUseProgram(mShaderProgram[0]->getProgram() );
-//    mActiveCamera->update(mPmatrixUniform0, mVmatrixUniform0);
-//    glUniformMatrix4fv(mMmatrixUniform1, 1, GL_FALSE, npc->mMatrix.constData());
-//    npc->draw();
 
     //cameramesh
     if(mActiveCamera == &editorCamera){ //lages bare hvis camera er i editormode
@@ -528,135 +448,8 @@ void RenderWindow::Tick(float deltaTime)
 {
     mActiveCamera->Tick(deltaTime);
     player->Tick(deltaTime);
-//    if(ob3) {ob3->Tick(deltaTime);}
     Movement(deltaTime);
-//    if (npcHit == false)
-//    {
-//        npc->Tick(deltaTime); //npc kjører ikke hvis bullet hitter
-//    }
-//    Trophies(deltaTime);
-//    Turret(deltaTime);
-
-    if (regn)
-    {
-        regnTimer += deltaTime;
-        for (int i = 0; i < regnliste.size(); i++)
-        {
-            if (regnTimer >= i/10)
-            {
-        regnliste.at(i)->Tick(deltaTime);
-            }
-        }
-    }
 }
-
-//void RenderWindow::Trophies(float deltaTime)
-//{
-//    TrophySpawnTimer += deltaTime;
-//    //oppgave 9
-//    for (int i = 0; i < blueTrophies.size();i++)
-//    {
-//        if (TrophySpawnTimer >= 2*i)
-//        {
-//            if (blueTrophies.at(i) != nullptr)
-//            {
-//            blueTrophies.at(i)->setScale(1);
-//            }
-//            if (redTrophies.at(i) != nullptr)
-//            {
-//            redTrophies.at(i)->setScale(1);
-//            }
-//        }
-//    }
-//    for (int i = 0; i < blueTrophies.size(); i++)
-//    {
-//        if (blueTrophies.at(i) != nullptr && abs(player->getPosition().x() - blueTrophies.at(i)->getPosition().x()) < 2 && abs(player->getPosition().y() - blueTrophies.at(i)->getPosition().y()) < 2)
-//        {
-//            blueTrophyCount -= 1;
-//            blueTrophies.at(i)->setScale(0);
-//            blueTrophies.at(i) = nullptr;
-//        }
-//    }
-
-//    for (int i = 0; i < redTrophies.size(); i++)
-//    {
-//        if (redTrophies.at(i) != nullptr && abs(npc->getPosition().x() - redTrophies.at(i)->getPosition().x()) < 2 && abs(npc->getPosition().y() - redTrophies.at(i)->getPosition().y()) < 2)
-//        {
-//            redTrophyCount -= 1;
-//            redTrophies.at(i)->setScale(0);
-//            redTrophies.at(i) = nullptr;
-//        }
-//    }
-
-//    //player win oppgave 12
-//    if (blueTrophyCount <= 0 && redTrophyCount > 0 && victory == false && player->getPosition().x() >= 35)
-//    {
-//        mLogger->logText("player won");
-//        victory = true;
-//    }
-
-//    //npc win
-//    if (blueTrophyCount > 0 && redTrophyCount <= 0 && victory == false)
-//    {
-//        mLogger->logText("npc won");
-//        victory = true;
-//    }
-//}
-
-////oppgave 8
-//void RenderWindow::Turret(float deltaTime)
-//{
-//    if (player->getPosition().x() <= 0)
-//    {turret->mMatrix.rotate(abs(turret->getPosition().x()-player->getPosition().x()/60),{0,0,1});}
-//    if (player->getPosition().x() > 0)
-//    {turret->mMatrix.rotate(-abs(turret->getPosition().x()-player->getPosition().x())/60,{0,0,1});} //forsøk på rotasjon
-
-//    hitTime += deltaTime;
-//    npcHitTime += deltaTime;
-
-//    if (bulletAliveTime >= 300)
-//    {
-//    bullet->setPosition(0,-30,5);
-//    shotCount += 1;
-//    bulletAliveTime = 0;
-//    }
-
-//    //finner npc og player sin retning
-//    QVector3D npcDir = npc->getPosition()-turret->getPosition();
-//    npcDir.normalize();
-//    QVector3D playerDir = player->getPosition()-turret->getPosition();
-//    playerDir.normalize();
-
-//    if(shotCount % 2 == 0)
-//    {
-//    bullet->move(npcDir*0.5f);
-//    }
-//    //annenhvert skudd på spiller og npc
-//    if(shotCount % 2 != 0)
-//    {
-//    bullet->move(playerDir*0.5f);
-//    }
-
-//    bulletAliveTime += 1;
-
-//    if(abs(player->getPosition().x() - bullet->getPosition().x()) < 2 && abs(player->getPosition().y() - bullet->getPosition().y()) < 2)
-//    {playerHit = true;
-//    hitTime = 0;
-//    }
-//    if(hitTime >= 2)
-//    {
-//     playerHit = false;
-//    }
-
-//    if(abs(npc->getPosition().x() - bullet->getPosition().x()) < 5 && abs(npc->getPosition().y() - bullet->getPosition().y()) < 5)
-//    {npcHit = true;
-//    npcHitTime = 0;
-//    }
-//    if(npcHitTime >= 2)
-//    {
-//     npcHit = false;
-//    }
-//}
 
 void RenderWindow::Movement(float deltaTime)
 {
@@ -710,16 +503,8 @@ void RenderWindow::Movement(float deltaTime)
         }
     }
 
-    if(regn)
-    {
-        if(mCurrentInputs[Qt::Key_H])
-        {
-            balldrop = true;
-        }
-    }
-
     ////Player movement
-    if(player && mActiveCamera == &gameCamera && playerHit == false)
+    if(player && mActiveCamera == &gameCamera)
     {
         if(mCurrentInputs[Qt::Key_W]) //frem
         {

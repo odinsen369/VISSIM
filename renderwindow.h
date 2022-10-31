@@ -10,8 +10,6 @@
 #include "visualobject.h"
 #include "interactiveobject.h"
 #include "camera.h"
-//#include "disc.h"
-//#include "npc.h"
 #include "graphmaker.h"
 #include "texture.h"
 #include "light.h"
@@ -152,9 +150,6 @@ public:
     Camera editorCamera;
     Camera* mActiveCamera{nullptr};
 
-//    Disc* disc{nullptr};
-//    NPC* npc{nullptr};
-//    NPC* turret{nullptr};
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
 
@@ -162,25 +157,8 @@ public:
     std::vector<InteractiveObject*> redTrophies;
 
     float time {0};
-    float bulletAliveTime{0};
-    float hitTime{0};
-    float npcHitTime{0};
-    float TrophySpawnTimer{0};
-    float regnTimer{0};
-
-    int shotCount{0};
-    int redTrophyCount {0}, blueTrophyCount {0};
-
     bool goingRight = true;
-    bool playerHit = false;
-    bool npcHit = false;
-    bool victory = false;
-    bool balldrop = false;
 
-    void Trophies(float deltaTime);
-    void Turret(float deltaTime);
-
-    std::vector<InteractiveObject*> regnliste;
 };
 
 #endif // RENDERWINDOW_H

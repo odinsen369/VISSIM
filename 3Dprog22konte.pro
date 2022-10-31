@@ -9,21 +9,18 @@ SOURCES += main.cpp \
     MeshGenerator.cpp \
     camera.cpp \
     cube.cpp \
-    disc.cpp \
     graphmaker.cpp \
     heightmap.cpp \
     interactiveobject.cpp \
     light.cpp \
     logger.cpp \
     mainwindow.cpp \
-    npc.cpp \
     objmesh.cpp \
     octahedronball.cpp \
     renderwindow.cpp \
     rollingball.cpp \
     shader.cpp \
     terrain.cpp \
-    tetrahedron.cpp \
     texture.cpp \
     trianglesurface.cpp \
     vertex.cpp \
@@ -34,7 +31,6 @@ HEADERS += \
     Vector3d.h \
     camera.h \
     cube.h \
-    disc.h \
     graphmaker.h \
     heightmap.h \
     interactiveobject.h \
@@ -42,14 +38,12 @@ HEADERS += \
     logger.h \
     mainwindow.h \
     meshgenerator.h \
-    npc.h \
     objmesh.h \
     octahedronball.h \
     renderwindow.h \
     rollingball.h \
     shader.h \
     terrain.h \
-    tetrahedron.h \
     texture.h \
     trianglesurface.h \
     vertex.h \
