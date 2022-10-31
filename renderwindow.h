@@ -10,8 +10,8 @@
 #include "visualobject.h"
 #include "interactiveobject.h"
 #include "camera.h"
-#include "disc.h"
-#include "npc.h"
+//#include "disc.h"
+//#include "npc.h"
 #include "graphmaker.h"
 #include "texture.h"
 #include "light.h"
@@ -152,9 +152,9 @@ public:
     Camera editorCamera;
     Camera* mActiveCamera{nullptr};
 
-    Disc* disc{nullptr};
-    NPC* npc{nullptr};
-    NPC* turret{nullptr};
+//    Disc* disc{nullptr};
+//    NPC* npc{nullptr};
+//    NPC* turret{nullptr};
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
 

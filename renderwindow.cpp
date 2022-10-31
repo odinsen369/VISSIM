@@ -11,11 +11,11 @@
 #include "shader.h"
 #include "mainwindow.h"
 #include "logger.h"
-#include "tetrahedron.h"
+//#include "tetrahedron.h"
 #include "trianglesurface.h"
 #include "octahedronball.h"
-#include "disc.h"
-#include "npc.h"
+//#include "disc.h"
+//#include "npc.h"
 #include "cube.h"
 #include "meshgenerator.h"
 #include "graphmaker.h"
@@ -27,7 +27,6 @@
 #include "objmesh.h"
 #include "terrain.h"
 
-//brukte kode fra aleksander sin branch på github (som jeg var med å jobbe på for obliger)
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
