@@ -18,6 +18,8 @@
 #include "objmesh.h"
 #include "trianglesurface.h"
 #include "terrain.h"
+#include "soundmanager.h"
+#include "soundsource.h"
 
 class QOpenGLContext;
 class Shader;
@@ -152,6 +154,9 @@ public:
 
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
+
+    SoundSource* mLaserSound{nullptr};
+    SoundSource* mExplosionSound{};
 
     std::vector<InteractiveObject*> blueTrophies;
     std::vector<InteractiveObject*> redTrophies;

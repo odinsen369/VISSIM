@@ -23,6 +23,10 @@
 #include "heightmap.h"
 #include "objmesh.h"
 #include "terrain.h"
+#include <thread>
+#include "soundmanager.h"
+#include "soundsource.h"
+#include "wavfilehandler.h"
 
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
@@ -48,6 +52,18 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     //Make the gameloop timer:
     mRenderTimer = new QTimer(this);
     createObjects();
+
+//    SoundManager::getInstance()->init();
+
+//    mExplosionSound = SoundManager::getInstance()->createSource("Explosion", QVector3D(10.0f,0.0f,0.0f),
+//                                                            "../3Dprog22konte/Assets/explosion.wav", false,3.0f);
+
+//    SoundManager::getInstance()->cleanUp();
+//    mExplosionSound->play();
+//    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
+//    mExplosionSound->play();
+
+
 }
 
 RenderWindow::~RenderWindow()
@@ -431,6 +447,20 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
                 (*it)->setDrawMethod(DrawMethod::Triangles);
             wireframe = false;
         }
+    }
+    if (event->key() == Qt::Key_R)
+    {
+        if (SoundManager::getInstance())
+        {
+            SoundManager::getInstance()->cleanUp();
+        }
+        SoundManager::getInstance()->init();
+
+        mExplosionSound = SoundManager::getInstance()->createSource("Explosion", QVector3D(10.0f,0.0f,0.0f),
+                                                                "../3Dprog22konte/Assets/explosion.wav", false,1.0f);
+
+
+        mExplosionSound->play();
     }
 }
 

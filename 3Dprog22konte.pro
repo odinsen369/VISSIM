@@ -5,6 +5,15 @@ CONFIG      += c++17
 
 TARGET      = 3D-programmering
 
+mac {
+    LIBS += -framework OpenAL
+}
+
+win32 {
+    INCLUDEPATH += $(OPENAL_HOME)\\include\\AL
+    LIBS *= $(OPENAL_HOME)\\libs\\Win64\\libOpenAL32.dll.a
+}
+
 SOURCES += main.cpp \
     MeshGenerator.cpp \
     camera.cpp \
@@ -20,11 +29,14 @@ SOURCES += main.cpp \
     renderwindow.cpp \
     rollingball.cpp \
     shader.cpp \
+    soundmanager.cpp \
+    soundsource.cpp \
     terrain.cpp \
     texture.cpp \
     trianglesurface.cpp \
     vertex.cpp \
-    visualobject.cpp
+    visualobject.cpp \
+    wavfilehandler.cpp
 
 HEADERS += \
     Triangle.h \
@@ -43,11 +55,14 @@ HEADERS += \
     renderwindow.h \
     rollingball.h \
     shader.h \
+    soundmanager.h \
+    soundsource.h \
     terrain.h \
     texture.h \
     trianglesurface.h \
     vertex.h \
-    visualobject.h
+    visualobject.h \
+    wavfilehandler.h
 
 FORMS += \
     mainwindow.ui
