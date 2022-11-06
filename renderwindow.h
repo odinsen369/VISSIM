@@ -155,7 +155,6 @@ public:
     HeightMap* bakke{nullptr};
     ObjMesh* mesh{nullptr};
 
-    SoundSource* mLaserSound{nullptr};
     SoundSource* mExplosionSound{};
 
     std::vector<InteractiveObject*> blueTrophies;

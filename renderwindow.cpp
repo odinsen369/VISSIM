@@ -52,18 +52,6 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     //Make the gameloop timer:
     mRenderTimer = new QTimer(this);
     createObjects();
-
-//    SoundManager::getInstance()->init();
-
-//    mExplosionSound = SoundManager::getInstance()->createSource("Explosion", QVector3D(10.0f,0.0f,0.0f),
-//                                                            "../3Dprog22konte/Assets/explosion.wav", false,3.0f);
-
-//    SoundManager::getInstance()->cleanUp();
-//    mExplosionSound->play();
-//    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
-//    mExplosionSound->play();
-
-
 }
 
 RenderWindow::~RenderWindow()
@@ -202,20 +190,20 @@ void RenderWindow::createObjects()
 
     /////mesh//////
     mesh = new ObjMesh("../3Dprog22konte/Assets/Monkey.obj");
-    mObjects.push_back(mesh); //spiller sitt mesh
+    mObjects.push_back(mesh); //playermesh
 
     /////light////// oppgave 3
     mLight = new Light;
     mLight->mMatrix.translate(-20,0,15);
     mObjects.push_back(mLight); //lager lyset
 
-    /////player///// oppgave 4
-     player = new InteractiveObject;
-     player->setDrawMethod(DrawMethod::Triangles);
-     player->setVertices(MeshGenerator::CubeMaker());
-     //player->hasGravity = true;
-     player->setPosition(0,0,0);
-     mObjects.push_back(player);
+    /////player/////
+    player = new InteractiveObject;
+    player->setDrawMethod(DrawMethod::Triangles);
+    player->setVertices(MeshGenerator::CubeMaker());
+    //player->hasGravity = true;
+    player->setPosition(0,0,0);
+    mObjects.push_back(player);
 
 //     /////bakke////// oppgave 2
      bakke = new HeightMap("../3Dprog22konte/Assets/EksamenHeightmap.bmp", 3, 0.1);
@@ -450,16 +438,12 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
     }
     if (event->key() == Qt::Key_R)
     {
-        if (SoundManager::getInstance())
-        {
-            SoundManager::getInstance()->cleanUp();
-        }
+        SoundManager::getInstance()->cleanUp();
         SoundManager::getInstance()->init();
 
         mExplosionSound = SoundManager::getInstance()->createSource("Explosion", QVector3D(10.0f,0.0f,0.0f),
-                                                                "../3Dprog22konte/Assets/explosion.wav", false,1.0f);
-
-
+                                                                "../3Dprog22konte/Assets/explosion.wav",
+                                                                    false,1.0f);
         mExplosionSound->play();
     }
 }
