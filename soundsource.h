@@ -5,44 +5,23 @@
 #include <al.h>
 #include <alc.h>
 #endif
-#ifdef __APPLE__
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#endif
 
 #include <string>
 #include <QVector3D>
 
-/// One sound source.
-/**
-    Contains one source and one buffer.
-    Intended to play a single clip.
-    Does not support streaming audio (yet).
-**/
 class SoundSource
 {
 public:
     /// Constructor.
-    /**
-        Takes two arguments, initialises some variables.
-        \param The name of the sound source. Not used.
-        \param A boolean to check if sound should loop.
-    **/
     SoundSource(std::string name, bool loop = false, float gain = 1.0);
     ~SoundSource();
 
-    /// Plays the sound source from the current position.
     void play();
-    /// Pauses the sound source at the current position.
     void pause();
-    /// Stops the sound source and rewinds to start.
     void stop();
 
     /// Loads one given WAVE file.
-    /**
-        Calls the wave loader from the FileHandler class, parses the wave data and buffers it.
-        \param The file path relative to execution directory.
-    **/
+
     bool loadWave(std::string filePath);
 
     void setPosition(QVector3D newPos);             ///< Sets source position from Vector3.

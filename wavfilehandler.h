@@ -1,8 +1,7 @@
 #ifndef FILEHANDLER_H
 #define FILEHANDLER_H
 
-#include <cstdint>    //does not work well on mac
-//#include <stdint.h>     //using this on Mac instead of cstdint. not a totally clean solution
+#include <cstdint>
 #include <string>
 #include <cstdio>
 
@@ -28,17 +27,10 @@ class WavFileHandler
 {
 public:
     /// Loads a given wave file, fills wave_t structure with wave data.
-    /**
-        \param File path relative to execution directory.
-        \param Pointer to a wave_t structure to contain the wave data.
-    **/
     static bool loadWave(std::string filePath, wave_t* wavePtr);
+
 private:
     /// Error handling function.
-    /**
-        Always returns false, outputs argumen string to the command line.
-        \param Error message to output.
-    **/
     static bool endOnError(std::string errmsg);
 };
 
