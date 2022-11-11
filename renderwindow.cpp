@@ -463,6 +463,7 @@ void RenderWindow::Tick(float deltaTime)
     mActiveCamera->Tick(deltaTime);
     player->Tick(deltaTime);
     Movement(deltaTime);
+    SoundManager::getInstance()->updateListener(mActiveCamera->GetPosition(), {0,0,0}, mActiveCamera->getForward(), {0,0,1});
 }
 
 void RenderWindow::Movement(float deltaTime)

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "soundmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,8 @@ int main(int argc, char *argv[])
     w.show();
 
     w.resize(900, 600);
+
+    SoundManager::getInstance()->cleanUp();
 
     return a.exec();
 }
